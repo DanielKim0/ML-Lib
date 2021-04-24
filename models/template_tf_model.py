@@ -12,6 +12,12 @@ class TemplateTFModel(TFModel):
     def load(self):
         pass
 
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
+
     def validate_fit(self):
         pass
 
