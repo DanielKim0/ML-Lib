@@ -5,24 +5,34 @@ from models.linear_model import LinearModel
 from metrics.mse import MSE
 
 def main():
+    # data generation
     gen = LinearGen([10, 6.8], 5, 0.01)
     X, y = gen.create_batch(512)
-    model = LinearModel()
-    model.save("test.linear")
 
+    # model initialization
+    model = LinearModel()
+    loss = MSE()
+    # model.save("test.linear")
+
+    # model fitting
     print(model)
     model.fit(X, y, True)
     print(model)
 
+    # model prediction
     result = model.predict(X)
-    loss = MSE().compare(y, result)
-    print(loss)
+    print(loss.compare(y, result))
 
+    # saving and loading
     model.save("test.linear")
     loaded = LinearModel()
     loaded.load("test.linear")
-    tf.debugging.assert_equal(result, loaded.predict(X))
 
+    # comparing saved and loaded models
+    result_loaded = loaded.predict(X)
+    tf.debugging.assert_equal(result, result_loaded)
+
+    # test data
     X_new, y_new = gen.create_batch(512)
     result = model.predict(X_new)
     print(loss.compare(y_new, result))

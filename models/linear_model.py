@@ -52,6 +52,9 @@ class LinearModel(BaseModel):
     def fit(self, X, y, intercept=False):
         super().fit()
         X, y, self.intercept = X, y, intercept
+        X = tf.cast(tf.constant(X), tf.float32)
+        y = tf.cast(tf.constant(y), tf.float32)
+
         if self.intercept:
             X = self.add_intercept(X)
         self.validate_fit(X, y)
