@@ -14,19 +14,19 @@ def main():
     model = LogisticModel()
     loss = CrossEntropy()
 
-    # print(model)
+    print(model)
     model.fit(X, y, len(b_true), loss, num_epochs=16, lr=0.3)
     model.save("test.logistic")
-    # print(model)
+    print(model)
     
-    # loaded = LogisticModel()
-    # loaded.load("test.logistic")
+    loaded = LogisticModel()
+    loaded.load("test.logistic")
     
-    # result = model.predict(X)
-    # print(MSE().compare(y, result))
+    result = model.predict(X)
+    print(MSE().compare(y, result))
 
-    # result_loaded = loaded.predict(X)
-    # tf.debugging.assert_equal(result, result_loaded)
+    result_loaded = loaded.predict(X)
+    tf.debugging.assert_equal(result, result_loaded)
 
 if __name__ == '__main__':
     main()

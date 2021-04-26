@@ -1,6 +1,5 @@
 from .tf_model import TFModel
 import tensorflow as tf
-import h5py, pickle
 from utils.compress import *
 
 def linreg(X, w, b):

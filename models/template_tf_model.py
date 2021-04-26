@@ -6,16 +6,16 @@ class TemplateTFModel(TFModel):
     def __init__(self):
         super().__init__()
 
-    def save(self):
-        super().save()
-
-    def load(self):
-        pass
-
     def __str__(self):
         pass
 
     def __repr__(self):
+        pass
+
+    def save(self):
+        super().save()
+
+    def load(self):
         pass
 
     def validate_fit(self):
