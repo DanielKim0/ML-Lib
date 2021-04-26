@@ -3,14 +3,12 @@ from .metric import BaseMetric
 import tensorflow as tf
 
 class CrossEntropy(BaseMetric):
-    @abstractmethod
     def compare(self, true, pred):
         return -tf.math.log(tf.boolean_mask(pred, tf.one_hot(true, depth=pred.shape[-1])))
 
 
 class ClassAccuracy(BaseMetric):
-    @abstractmethod
     def compare(self, true, pred):
-        maxes = tf.math.argmax(pred, axis=0)
+        maxes = tf.math.argmax(pred, axis=1)
         cmp = (tf.cast(maxes, true.dtype) == true)
         return float(tf.reduce_sum(tf.cast(cmp, true.dtype))) / len(pred)

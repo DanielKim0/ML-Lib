@@ -35,16 +35,6 @@ class LinearTFModel(TFModel):
             s = f"LinearTFModel(model_fit={True}, w={self.w}, b={self.b}, loss={self.loss}, lr={self.lr}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, model={self.model}, update={self.update})"
         return s
 
-    def validate_fit(self, X, y):
-        if X.shape[0] != y.shape[0]:
-            raise ValueError("")
-        if y.shape[1] != 1:
-            raise ValueError("")
-
-    def validate_predict(self, X):
-        if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
-
     def save(self, path):
         super().save()
         data = {
@@ -72,6 +62,16 @@ class LinearTFModel(TFModel):
         self.update = data["update"]
         self.w = arrays["w"]
         self.b = arrays["b"]
+
+    def validate_fit(self, X, y):
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("")
+        if y.shape[1] != 1:
+            raise ValueError("")
+
+    def validate_predict(self, X):
+        if X.shape[1] != self.w.shape[0]:
+            raise ValueError("")
 
     def build_model(self, w_size, w_mean, w_stddev):
         self.w = tf.Variable(tf.random.normal(shape=(w_size, 1), mean=w_mean, stddev=w_stddev), trainable=True)

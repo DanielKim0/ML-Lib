@@ -27,5 +27,14 @@ class TemplateTFModel(TFModel):
     def build_model(self):
         pass
 
+    def fit(self):
+        pass
+
+    def train_epoch(self):
+        pass
+
+    def train_step(self):
+        pass
+
     def predict(self):
         pass

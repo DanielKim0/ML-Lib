@@ -23,10 +23,16 @@ def main():
     loaded.load("test.logistic")
     
     result = model.predict(X)
-    print(MSE().compare(y, result))
+    print(tf.reduce_mean(loss.compare(y, result)))
+    print(ClassAccuracy().compare(y, result))
 
     result_loaded = loaded.predict(X)
     tf.debugging.assert_equal(result, result_loaded)
+
+    X_new, y_new = LogisticGen().create_batch(w_true, b_true, 5, 512)
+    result = model.predict(X_new)
+    print(tf.reduce_mean(loss.compare(y_new, result)))
+    print(ClassAccuracy().compare(y_new, result))
 
 if __name__ == '__main__':
     main()

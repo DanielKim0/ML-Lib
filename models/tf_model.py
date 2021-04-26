@@ -17,8 +17,8 @@ class TFModel(BaseModel):
     def fit(self, **kwargs):
         super().fit()
         for cur_epoch in range(self.curr_epoch, self.num_epochs):
-            self.train_epoch()
             self.curr_epoch += 1
+            self.train_epoch()
 
     def data_iter(self, features, labels):
         num_examples = len(features)
