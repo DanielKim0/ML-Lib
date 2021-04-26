@@ -5,7 +5,8 @@ from models.linear_model import LinearModel
 from metrics.mse import MSE
 
 def main():
-    X, y = LinearGen().create_batch([10, 6.8], 5, 0.01, 512)
+    gen = LinearGen([10, 6.8], 5, 0.01)
+    X, y = gen.create_batch(512)
     model = LinearModel()
     model.save("test.linear")
 
@@ -22,8 +23,9 @@ def main():
     loaded.load("test.linear")
     tf.debugging.assert_equal(result, loaded.predict(X))
 
-    X_new, y_new = LogisticGen().create_batch(w_true, b_true, 5, 512)
-    result = model.predict(X_new))
+    X_new, y_new = gen.create_batch(512)
+    result = model.predict(X_new)
+    print(loss.compare(y_new, result))
 
 if __name__ == '__main__':
     main()
