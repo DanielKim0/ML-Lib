@@ -10,6 +10,7 @@ def main():
         [5, 6, 7, 8],
     ]
     b_true = [1.5, 3, 2.5, 0.5]
+    gen = LogisticGen()
     X, y = LogisticGen().create_batch(w_true, b_true, 5, 512)
     model = LogisticModel()
     loss = CrossEntropy()

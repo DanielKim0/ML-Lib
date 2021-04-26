@@ -7,13 +7,15 @@ def softmax(o):
     return o_exp / sums
 
 class LogisticGen(BaseGen):
-    def __init__(self):
+    def __init__(self, w, b, stddev):
         super().__init__()
+        self.w = tf.cast(tf.constant(w), tf.float32)
+        self.b = tf.cast(tf.constant(b), tf.float32)
+        self.stddev = stddev
 
-    def create_batch(self, w, b, stddev, size=100):
-        w = tf.cast(tf.constant(w), tf.float32)
+    def create_batch(self, size=100):
         X = tf.zeros((size, w.shape[0]))
         X += tf.random.normal(shape=X.shape)
-        y = softmax(tf.matmul(X, w) + b)
+        y = softmax(tf.matmul(X, self.w) + self.b)
         y = tf.math.argmax(y, axis=1)
         return X, y

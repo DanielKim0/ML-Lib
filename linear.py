@@ -22,6 +22,9 @@ def main():
     loaded.load("test.linear")
     tf.debugging.assert_equal(result, loaded.predict(X))
 
+    X_new, y_new = LogisticGen().create_batch(w_true, b_true, 5, 512)
+    result = model.predict(X_new))
+
 if __name__ == '__main__':
     main()
 
