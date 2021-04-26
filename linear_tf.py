@@ -12,11 +12,11 @@ def main():
 
     print(model)
     model.fit(X, y, loss, num_epochs=16)
-    model.save("test.linear")
+    model.save("test.lineartf")
     print(model)
     
     loaded = LinearTFModel()
-    loaded.load("test.linear")
+    loaded.load("test.lineartf")
     
     result = model.predict(X)
     print(MSE().compare(y, result))

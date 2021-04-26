@@ -28,6 +28,7 @@ class TemplateTFModel(TFModel):
         pass
 
     def fit(self):
+        super().fit()
         pass
 
     def train_epoch(self):
