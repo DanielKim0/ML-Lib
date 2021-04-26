@@ -12,7 +12,7 @@ def main():
         [5, 6, 7, 8],
     ]
     b_true = [1.5, 3, 2.5, 0.5]
-    gen = LogisticGen(w_true, b_true, 5)
+    gen = LogisticGen(w_true, b_true, .1)
     X, y = gen.create_batch(512)
 
     # model initialization
