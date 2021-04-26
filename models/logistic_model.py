@@ -114,5 +114,5 @@ class LogisticModel(TFModel):
         dw, db = g.gradient(l, [self.w, self.b])
         self.update([self.w, self.b], [dw, db], self.lr, self.batch_size)
 
-    def predict(self):
-        pass
+    def predict(self, X):
+        return self.model(X, self.w, self.b)
