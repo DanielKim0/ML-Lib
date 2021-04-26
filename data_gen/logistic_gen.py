@@ -17,5 +17,6 @@ class LogisticGen(BaseGen):
         X = tf.zeros((size, w.shape[0]))
         X += tf.random.normal(shape=X.shape)
         y = softmax(tf.matmul(X, self.w) + self.b)
+        y += tf.random.normal(shape=y.shape, stddev=self.stddev)
         y = tf.math.argmax(y, axis=1)
         return X, y
