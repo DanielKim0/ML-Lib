@@ -84,7 +84,7 @@ class LinearTFModel(TFModel):
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.loss = loss.compare
-        self.lr = 0.03
+        self.lr = lr
         self.X = X
         self.y = y
         self.build_model(X.shape[1], mean, stddev)
@@ -99,7 +99,7 @@ class LinearTFModel(TFModel):
 
     def train_step(self, X, y):
         with tf.GradientTape() as g:
-            l = self.loss(self.model(X, self.w, self.b), y)
+            l = self.loss(y, self.model(X, self.w, self.b))
         dw, db = g.gradient(l, [self.w, self.b])
         self.update([self.w, self.b], [dw, db], self.lr, self.batch_size)
 
