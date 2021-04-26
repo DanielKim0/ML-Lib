@@ -2,7 +2,8 @@ import tensorflow as tf
 
 from data_gen.logistic_gen import LogisticGen
 from models.logistic_model import LogisticModel
-from metrics.log_likelihood import *
+from metrics.cross_entropy import CrossEntropy
+from metrics.class_accuracy import ClassAccuracy
 
 def main():
     # data generation

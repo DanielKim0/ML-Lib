@@ -95,18 +95,16 @@ class LogisticModel(TFModel):
         self.num_epochs = num_epochs
         self.loss = loss.compare
         self.lr = lr
-        self.X = X
-        self.y = y
         self.classes = classes
         self.build_model(X.shape[1], classes, mean, stddev)
-        self.validate_fit(self.X, self.y, classes)
-        super().fit()
+        self.validate_fit(X, y, classes)
+        super().fit(X, y)
 
-    def train_epoch(self):
-        for X, y in self.data_iter(self.X, self.y):
-            self.train_step(X, y)
-        train_l = self.loss(self.y, self.model(self.X, self.w, self.b))
-        print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(accuracy(self.y, self.model(self.X, self.w, self.b)))}")
+    def train_epoch(self, X, y):
+        for X_batch, y_batch in self.data_iter(X, y):
+            self.train_step(X_batch, y_batch)
+        train_l = self.loss(y, self.model(X, self.w, self.b))
+        print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(accuracy(y, self.model(X, self.w, self.b)))}")
 
     def train_step(self, X, y):
         with tf.GradientTape() as g:

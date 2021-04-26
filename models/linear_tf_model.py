@@ -84,16 +84,14 @@ class LinearTFModel(TFModel):
         self.num_epochs = num_epochs
         self.loss = loss.compare
         self.lr = lr
-        self.X = X
-        self.y = y
         self.build_model(X.shape[1], mean, stddev)
-        self.validate_fit(self.X, self.y)
-        super().fit()
+        self.validate_fit(X, y)
+        super().fit(X, y)
 
-    def train_epoch(self):
-        for X, y in self.data_iter(self.X, self.y):
-            self.train_step(X, y)
-        train_l = self.loss(self.model(self.X, self.w, self.b), self.y)
+    def train_epoch(self, X, y):
+        for X_batch, y_batch in self.data_iter(X, y):
+            self.train_step(X_batch, y_batch)
+        train_l = self.loss(self.model(X, self.w, self.b), y)
         print(f'epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}')
 
     def train_step(self, X, y):

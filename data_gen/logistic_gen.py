@@ -14,7 +14,7 @@ class LogisticGen(BaseGen):
         self.stddev = stddev
 
     def create_batch(self, size=100):
-        X = tf.zeros((size, w.shape[0]))
+        X = tf.zeros((size, self.w.shape[0]))
         X += tf.random.normal(shape=X.shape)
         y = softmax(tf.matmul(X, self.w) + self.b)
         y += tf.random.normal(shape=y.shape, stddev=self.stddev)

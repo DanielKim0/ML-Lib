@@ -14,11 +14,11 @@ class TFModel(BaseModel):
     def build_model(self, **kwargs):
         pass
 
-    def fit(self, **kwargs):
+    def fit(self, *args):
         super().fit()
         for cur_epoch in range(self.curr_epoch, self.num_epochs):
             self.curr_epoch += 1
-            self.train_epoch()
+            self.train_epoch(*args)
 
     def data_iter(self, features, labels):
         num_examples = len(features)
