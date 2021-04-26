@@ -80,6 +80,9 @@ class LinearTFModel(TFModel):
         self.update = sgd
 
     def fit(self, X, y, loss, lr=0.03, batch_size=16, num_epochs=32, mean=0, stddev=0.01):
+        X = tf.cast(tf.constant(X), tf.float32)
+        y = tf.cast(tf.constant(y), tf.float32)
+
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.loss = loss.compare
