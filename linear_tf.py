@@ -3,6 +3,7 @@ import tensorflow as tf
 from data_gen.linear_gen import LinearGen
 from models.linear_tf_model import LinearTFModel
 from metrics.mse import MSE
+from optimizers.sgd import SGD
 
 def main():
     # data generation
@@ -12,11 +13,12 @@ def main():
     # model initialization
     model = LinearTFModel()
     loss = MSE()
+    opt = SGD(0.3)
     # model.save("test.lineartf")
 
     # model fitting
     print(model)
-    model.fit(X, y, loss, num_epochs=16)
+    model.fit(X, y, loss, opt, num_epochs=16)
     print(model)
 
     # model prediction

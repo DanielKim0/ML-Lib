@@ -4,6 +4,7 @@ from data_gen.logistic_gen import LogisticGen
 from models.logistic_model import LogisticModel
 from metrics.cross_entropy import CrossEntropy
 from metrics.class_accuracy import ClassAccuracy
+from optimizers.sgd import SGD
 
 def main():
     # data generation
@@ -18,11 +19,12 @@ def main():
     # model initialization
     model = LogisticModel()
     loss = CrossEntropy()
+    opt = SGD(0.3)
     # model.save("test.logistic")
 
     # model fitting
     print(model)
-    model.fit(X, y, len(b_true), loss, num_epochs=16, lr=0.3)
+    model.fit(X, y, len(b_true), loss, opt, num_epochs=16)
     print(model)
     
     # model prediction
