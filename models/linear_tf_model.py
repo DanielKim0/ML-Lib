@@ -68,13 +68,17 @@ class LinearTFModel(TFModel):
         self.model = linreg
 
     def fit(self, X, y, loss, opt, batch_size=16, num_epochs=32, mean=0, stddev=0.01):
+        # data casts
         X = tf.cast(tf.constant(X), tf.float32)
         y = tf.cast(tf.constant(y), tf.float32)
 
+        # setting instance variables
         self.batch_size = batch_size
         self.num_epochs = num_epochs
-        self.loss = loss.compare
         self.opt = opt
+        self.loss = loss
+        
+        # build, validate, fit
         self.build_model(X.shape[1], mean, stddev)
         self.validate_fit(X, y)
         super().fit(X, y)
@@ -82,12 +86,12 @@ class LinearTFModel(TFModel):
     def train_epoch(self, X, y):
         for X_batch, y_batch in self.data_iter(X, y):
             self.train_step(X_batch, y_batch)
-        train_l = self.loss(self.model(X, self.w, self.b), y)
+        train_l = self.loss.compare(self.model(X, self.w, self.b), y)
         print(f'epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}')
 
     def train_step(self, X, y):
         with tf.GradientTape() as g:
-            l = self.loss(y, self.model(X, self.w, self.b))
+            l = self.loss.compare(y, self.model(X, self.w, self.b))
         dw, db = g.gradient(l, [self.w, self.b])
         self.opt.update([self.w, self.b], [dw, db], self.batch_size)
 

@@ -50,7 +50,6 @@ class LinearModel(BaseModel):
             raise ValueError("")
 
     def fit(self, X, y, intercept=False):
-        super().fit()
         X, y, self.intercept = X, y, intercept
         X = tf.cast(tf.constant(X), tf.float32)
         y = tf.cast(tf.constant(y), tf.float32)
@@ -63,6 +62,7 @@ class LinearModel(BaseModel):
         XtX_inv = tf.linalg.inv(XtX)
         XtX_inv_Xt = tf.matmul(XtX_inv, tf.transpose(X))
         self.w = tf.matmul(XtX_inv_Xt, y)
+        super().fit()
 
     def predict(self, X):
         if self.intercept:
