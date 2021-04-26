@@ -4,7 +4,7 @@ from .tf_model import TFModel
 from utils.compress import *
 from comp.models import logreg
 from comp.functions import *
-
+from metrics.class_accuracy import *
 
 class LogisticModel(TFModel):
     def __init__(self):
@@ -95,7 +95,7 @@ class LogisticModel(TFModel):
         for X_batch, y_batch in self.data_iter(X, y):
             self.train_step(X_batch, y_batch)
         train_l = self.loss.compare(y, self.model(X, self.w, self.b))
-        print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(accuracy(y, self.model(X, self.w, self.b)))}")
+        print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(ClassAccuracy().compare(y, self.model(X, self.w, self.b)))}")
 
     def train_step(self, X, y):
         with tf.GradientTape() as g:
