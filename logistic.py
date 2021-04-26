@@ -14,10 +14,10 @@ def main():
     model = LogisticModel()
     loss = CrossEntropy()
 
-    print(model)
+    # print(model)
     model.fit(X, y, len(b_true), loss, num_epochs=16, lr=0.3)
     model.save("test.logistic")
-    print(model)
+    # print(model)
     
     # loaded = LogisticModel()
     # loaded.load("test.logistic")
