@@ -1,5 +1,6 @@
 from .base_opt import BaseOpt
 
+
 class SGD(BaseOpt):
     def __init__(self, lr):
         self.lr = lr

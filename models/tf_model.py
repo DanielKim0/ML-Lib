@@ -1,7 +1,10 @@
+import os
+import random
 import tensorflow as tf
 from abc import abstractmethod
+
 from .base_model import BaseModel
-import random, os
+
 
 class TFModel(BaseModel):
     def __init__(self, checkpoint_dir="checkpoints"):

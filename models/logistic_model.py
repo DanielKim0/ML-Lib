@@ -1,5 +1,6 @@
-from .tf_model import TFModel
 import tensorflow as tf
+
+from .tf_model import TFModel
 from utils.compress import *
 from comp.models import logreg
 from comp.functions import *
@@ -13,10 +14,10 @@ class LogisticModel(TFModel):
         s = "Logistic Model\n"
         if self.model_fit:
             s += "Currently fit\n"
-            s += f"w.shape: {self.w.shape[0]}\n"
+            s += f"w.shape: {self.w.shape}\n"
+            s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"classes: {self.classes}\n"
             s += f"loss: {self.loss}\n"
-            s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"opt: {self.opt}\n"
         else:
             s += "Currently not fit\n"
@@ -48,12 +49,14 @@ class LogisticModel(TFModel):
 
     def load(self, path):
         data, arrays = uncompress_files(path)
+
         self.loss = data["loss"]
+        self.opt = data["opt"]
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
         self.model = data["model"]
-        self.opt = data["opt"]
         self.classes = data["classes"]
+        
         self.w = arrays["w"]
         self.b = arrays["b"]
         

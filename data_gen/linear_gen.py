@@ -1,5 +1,6 @@
-from .base_gen import BaseGen
 import tensorflow as tf
+from .base_gen import BaseGen
+
 
 class LinearGen(BaseGen):
     def __init__(self, w, b, stddev):

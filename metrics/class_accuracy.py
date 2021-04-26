@@ -1,6 +1,5 @@
-from .metric import BaseMetric
 import tensorflow as tf
-
+from .metric import BaseMetric
 
 class ClassAccuracy(BaseMetric):
     def compare(self, true, pred):

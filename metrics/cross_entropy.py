@@ -1,5 +1,5 @@
-from .metric import BaseMetric
 import tensorflow as tf
+from .metric import BaseMetric
 
 class CrossEntropy(BaseMetric):
     def compare(self, true, pred):

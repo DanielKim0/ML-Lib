@@ -1,5 +1,6 @@
-from .base_gen import BaseGen
 import tensorflow as tf
+from .base_gen import BaseGen
+
 
 def softmax(o):
     o_exp = tf.math.exp(o)

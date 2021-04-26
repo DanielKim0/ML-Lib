@@ -1,7 +1,9 @@
-from .base_model import BaseModel
 import tensorflow as tf
 import numpy as np
+
+from .base_model import BaseModel
 from utils.compress import *
+
 
 class LinearModel(BaseModel):
     def __init__(self):

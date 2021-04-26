@@ -1,5 +1,6 @@
-from .tf_model import TFModel
 import tensorflow as tf
+
+from .tf_model import TFModel
 
 
 class TemplateTFModel(TFModel):
