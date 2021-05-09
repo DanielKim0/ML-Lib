@@ -95,6 +95,7 @@ class LogisticModel(TFModel):
         for X_batch, y_batch in self.data_iter(X, y):
             self.train_step(X_batch, y_batch)
         train_l = self.loss.compare(y, self.model(X, self.w, self.b))
+        print(self.model(X, self.w, self.b))
         print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(ClassAccuracy().compare(y, self.model(X, self.w, self.b)))}")
 
     def train_step(self, X, y):
@@ -104,4 +105,5 @@ class LogisticModel(TFModel):
         self.opt.update([self.w, self.b], [dw, db], self.batch_size)
 
     def predict(self, X):
+        self.validate_predict(X)
         return self.model(X, self.w, self.b)
