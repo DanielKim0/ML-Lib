@@ -46,5 +46,6 @@ class PolynomialGen(BaseGen):
             y += curr_sum
             expo += 1
         y += self.b
+        y += tf.random.normal(shape=y.shape, stddev=self.stddev)
         return X, y
 

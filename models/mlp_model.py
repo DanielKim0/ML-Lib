@@ -41,7 +41,7 @@ class MLPModel(TFModel):
             return o
         self.model = net
 
-    def fit(self, X, y, hiddens, outputs, loss, opt, act=tanh, batch_size=16, num_epochs=32, mean=0, stddev=1):
+    def fit(self, X, y, hiddens, outputs, loss, opt, act=relu, batch_size=16, num_epochs=32, mean=0, stddev=.1):
         # data casts
         X = tf.cast(tf.constant(X), tf.float32)
 
