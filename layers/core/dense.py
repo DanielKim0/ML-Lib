@@ -1,18 +1,23 @@
 import tensorflow as tf
 from .core import CoreLayer
+from comp.param_init import *
 
 class DenseLayer(CoreLayer):
-    def __init__(self, nodes, act=None, reg=None, w_mean=0, w_stddev=0.1):
+    def __init__(self, nodes, act=None, reg=None, param=None):
         super().__init__()
         self.nodes = nodes
         self.act = act
         self.reg = reg
+        self.param = param
         self.w_mean = w_mean
         self.w_stddev = w_stddev
 
     def init_weights(self):
         self.b = tf.Variable(tf.zeros(self.out), trainable=True)
-        self.w = tf.Variable(tf.random.normal((self.inp, self.out), mean=self.w_mean, stddev=self.w_stddev), trainable=True)
+        if not self.param:
+            self.w = normal(0, 0.1)((self.inp, self.out))
+        else:
+            self.w = self.param((self.inp, self.out))
 
     def op(self, X):
         if not self.act:
