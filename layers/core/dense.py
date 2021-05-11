@@ -2,10 +2,11 @@ import tensorflow as tf
 from .core import CoreLayer
 
 class DenseLayer(CoreLayer):
-    def __init__(self, nodes, act=None, w_mean=0, w_stddev=0.1):
+    def __init__(self, nodes, act=None, reg=None, w_mean=0, w_stddev=0.1):
         super().__init__()
         self.nodes = nodes
         self.act = act
+        self.reg = reg
         self.w_mean = w_mean
         self.w_stddev = w_stddev
 
@@ -18,3 +19,9 @@ class DenseLayer(CoreLayer):
             return tf.matmul(X, self.w) + self.b
         else:
             return self.act(tf.matmul(X, self.w) + self.b)
+
+    def loss(self):
+        if not reg:
+            return 0
+        else:
+            return reg(self.w)

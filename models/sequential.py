@@ -79,9 +79,17 @@ class SequentialModel(TFModel):
                 weights.extend(layer.weights())
         return weights
 
+    def gather_loss(self):
+        loss = 0
+        for layer in self.layers:
+            if layer.weighted:
+                loss += layer.loss()
+        return loss
+
     def train_step(self, X, y):
         with tf.GradientTape() as g:
             l = self.loss.compare(y, self.model(X, self.layers))
+            l += self.gather_loss()
         grads = g.gradient(l, self.gather_weights())
         self.opt.update_model(self.layers, grads, self.batch_size)
         # print(grads)
