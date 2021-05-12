@@ -34,6 +34,7 @@ class SequentialModel(TFModel):
         pass
 
     def build_model(self, inp):
+        # change to 2D+
         prev = None
         curr = inp
         for layer in self.layers:
@@ -62,7 +63,7 @@ class SequentialModel(TFModel):
         self.loss = loss
 
         # build, validate, fit
-        self.build_model(X.shape[1])
+        self.build_model(X.shape[1:])
         # self.validate_fit(X, y, act)
         super().fit(X, y)
 
