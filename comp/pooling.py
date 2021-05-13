@@ -1,6 +1,12 @@
 import tensorflow as tf
 
-def pooling2d(X, size, padding, stride, mode="max"):
+def pooling2d(X, size, stride, padding, mode="max"):
+    if len(X.shape) == 4:
+        return split_func(X, pooling2d_multi_calc, size, stride, padding, mode)
+    else:
+        return split_func(X, pooling2d_calc, size, stride, padding, mode)
+
+def pooling2d_calc(X, size, stride, padding, mode):
     h, w = size
     if padding == "same":
         X = tf.pad(X, [[h-1, h-1], [w-1, w-1]])
@@ -14,9 +20,9 @@ def pooling2d(X, size, padding, stride, mode="max"):
                 tf.reduce_mean(X[i:i+h, j:j+w])
     return Y
 
-def pooling2d_multi(X, size, padding, stride, mode="max"):
+def pooling2d_multi_calc(X, size, stride, padding, mode):
     # assume channel-last syntax
     res = []
-    for x in tf.split(X, X.shape[3], axis=3):
-        res.append(x, size, padding, stride, mode)
-    return tf.concat(res, 3)
+    for x in tf.split(X, X.shape[2], axis=2):
+        res.append(tf.squeeze(x, 2), size, stride, padding, mode)
+    return tf.concat(res, 2)
