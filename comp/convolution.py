@@ -7,9 +7,15 @@ from functions import split_func
 
 def get_conv_size(inp, ker, stride, padding):
     if padding == "same":
-        return [int(inp.shape[i]/stride[i]) for i in range(stride)]
+        size = [int(inp[i]/stride[i]) for i in range(stride)]
     else:
-        return [int((X.shape[i]-ker.shape[i]+1)/stride[i]) for i in range(stride)]
+        size = [int((X[i]-ker[i]+1)/stride[i]) for i in range(stride)]
+    if len(inp) == 3: # if input has channel input
+        if len(ker) == 4: # convolution
+            size.append(ker[3])
+        else: # pooling
+            size.append(inp[3])
+    return size
 
 def conv2d(X, K, stride, padding):
     if len(X.shape) == 4:
