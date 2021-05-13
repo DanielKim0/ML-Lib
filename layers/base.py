@@ -9,9 +9,9 @@ class Layer:
         self.inp = 0
         self.out = 0
 
-    def set_dims(self, inp, out):
+    def set_dims(self, inp):
         self.inp = inp
-        self.out = out
+        self.out = inp
 
     @abstractmethod
     def op(self):

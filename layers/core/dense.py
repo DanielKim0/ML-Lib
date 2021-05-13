@@ -9,12 +9,16 @@ class DenseLayer(CoreLayer):
         self.w_mean = w_mean
         self.w_stddev = w_stddev
 
+    def set_dims(self, inp):
+        self.inp = inp
+        self.out = self.nodes
+
     def init_weights(self):
-        self.b = tf.Variable(tf.zeros(self.out), trainable=True)
+        self.b = tf.Variable(tf.zeros(self.out[0]), trainable=True)
         if not self.param:
-            self.w = normal(0, 0.1)((self.inp, self.out))
+            self.w = normal(0, 0.1)((self.inp[0], self.out[0]))
         else:
-            self.w = self.param((self.inp, self.out))
+            self.w = self.param((self.inp[0], self.out[0]))
 
     def call(self, X):
         return tf.matmul(X, self.w) + self.b

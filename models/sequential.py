@@ -35,16 +35,14 @@ class SequentialModel(TFModel):
 
     def build_model(self, inp):
         # change to 2D+
-        prev = None
+        prev = []
         curr = inp
         for layer in self.layers:
+            prev = curr
+            layer.set_dims(prev)
+            curr = layer.out
             if layer.weighted:
-                prev = curr
-                curr = layer.nodes
-                layer.set_dims(prev, curr)
                 layer.init_weights()
-            else:
-                layer.set_dims(curr, curr)
 
         def net(X, model):
             for layer in model:

@@ -10,7 +10,7 @@ class Conv2DLayer(CoreLayer):
         self.padding = padding
         self.stride = stride
 
-    def set_dims(self, inp, out):
+    def set_dims(self, inp):
         self.inp = inp
         self.out = get_conv_size(inp, self.kernel_size, self.stride, self.padding)
 
