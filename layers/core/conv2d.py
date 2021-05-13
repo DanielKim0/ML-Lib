@@ -12,7 +12,7 @@ class Conv2DLayer(CoreLayer):
 
     def set_dims(self, inp, out):
         self.inp = inp
-        self.out = [int((inp[i] - self.kernel_size[i] + self.padding[i] + self.stride[i])/self.stride[i]) for i in range(len(inp))]
+        self.out = get_conv_size(inp, self.kernel_size, self.stride, self.padding)
 
     def init_weights(self, kernel_size):
         self.b = tf.Variable(tf.zeros(1,), trainable=True)

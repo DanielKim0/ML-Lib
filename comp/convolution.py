@@ -5,6 +5,12 @@ from functions import split_func
 # 4d kernel with dimensions: k_h, k_w, c_in, c_out
 # output: batch, o_h, o_w, c_out
 
+def get_conv_size(inp, ker, stride, padding):
+    if padding == "same":
+        return [int(inp.shape[i]/stride[i]) for i in range(stride)]
+    else:
+        return [int((X.shape[i]-ker.shape[i]+1)/stride[i]) for i in range(stride)]
+
 def conv2d(X, K, stride, padding):
     if len(X.shape) == 4:
         return split_func(X, conv2d_multi_calc, K, stride, padding)
@@ -15,7 +21,7 @@ def conv2d_calc(X, K, stride, padding):
     h, w = K.shape
     if padding == "same":
         X = tf.pad(X, [[h-1, h-1], [w-1, w-1]])
-    Y = tf.Variable(tf.zeros((X.shape[0]-h+1, X.shape[1]-w+1)))
+    Y = tf.Variable(tf.zeros(get_conv_size(X.shape, K.shape, stride, padding)))
     for i in range(0, Y.shape[0], stride[0]):
         for j in range(0, Y.shape[1], stride[1]):
             Y[i,j].assign(tf.reduce_sum(X[i:i+h,j:j+w] * K))

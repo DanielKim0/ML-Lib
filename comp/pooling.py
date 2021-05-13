@@ -1,4 +1,5 @@
 import tensorflow as tf
+from convolution import get_conv_size
 
 def pooling2d(X, size, stride, padding, mode="max"):
     if len(X.shape) == 4:
@@ -11,7 +12,7 @@ def pooling2d_calc(X, size, stride, padding, mode):
     if padding == "same":
         X = tf.pad(X, [[h-1, h-1], [w-1, w-1]])
 
-    Y = tf.Variable(tf.zeros((X.shape[0]-h+1, X.shape[1]-w+1)))
+    Y = tf.Variable(tf.zeros(get_conv_size(X.shape, size, stride, padding)))
     for i in range(0, Y.shape[0], stride[0]):
         for j in range(0, Y.shape[1], stride[1]):
             if mode == "max":
