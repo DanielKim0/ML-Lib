@@ -13,3 +13,10 @@ def pooling2d(X, size, padding, stride, mode="max"):
             elif mode == "avg":
                 tf.reduce_mean(X[i:i+h, j:j+w])
     return Y
+
+def pooling2d_multi(X, size, padding, stride, mode="max"):
+    # assume channel-last syntax
+    res = []
+    for x in tf.split(X, X.shape[3], axis=3):
+        res.append(x, size, padding, stride, mode)
+    return tf.concat(res, 3)
