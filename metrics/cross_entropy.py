@@ -1,6 +1,6 @@
 import tensorflow as tf
 from .metric import BaseMetric
-from comp.functions import softmax
+from comp.models import softmax
 
 class CrossEntropy(BaseMetric):
     def __init__(self, default_logits=False):
