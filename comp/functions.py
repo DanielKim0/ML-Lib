@@ -1,6 +1,8 @@
 import tensorflow as tf
 
-def softmax(o):
-    o_exp = tf.math.exp(o)
-    sums = tf.math.reduce_sum(o_exp, 1, keepdims=True)
-    return o_exp / sums
+
+def split_func(X, func, *args):
+    inp = tf.split(X, X.shape[0], axis=0)
+    args = list(args)
+    res = [func(*[tf.squeeze(x, axis=0)] + list(args)) for x in inp]
+    return tf.stack(res, 0)
