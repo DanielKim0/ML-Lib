@@ -27,10 +27,10 @@ class CoreLayer(Layer):
             return self.act(self.call(X))
 
     def loss(self):
-        if not reg:
+        if not self.reg:
             return 0
         else:
-            return reg(self.w)
+            return self.reg(self.w)
 
     @abstractmethod
     def init_weights(self):

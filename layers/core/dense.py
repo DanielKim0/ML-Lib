@@ -5,13 +5,12 @@ from comp.param_init import *
 class DenseLayer(CoreLayer):
     def __init__(self, nodes, act=None, reg=None, param=None):
         super().__init__(act, reg, param)
+        # w_mean and w_stddev are now in "param"
         self.nodes = nodes
-        self.w_mean = w_mean
-        self.w_stddev = w_stddev
 
     def set_dims(self, inp):
         self.inp = inp
-        self.out = self.nodes
+        self.out = [self.nodes]
 
     def init_weights(self):
         self.b = tf.Variable(tf.zeros(self.out[0]), trainable=True)
