@@ -46,7 +46,9 @@ class SequentialModel(TFModel):
 
         def net(X, model):
             for layer in model:
+                "layer"
                 X = layer.op(X)
+            "complete"
             return X
         self.model = net
 

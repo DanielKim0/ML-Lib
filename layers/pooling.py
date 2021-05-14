@@ -6,14 +6,14 @@ from comp.convolution import get_conv_size
 class Pooling(Layer):
     def __init__(self, size, stride, padding="none", mode="max"):
         super().__init__()
-        self.size = size
+        self.size = [size, size]
         self.stride = stride
         self.padding = padding
         self.mode = mode
 
     def set_dims(self, inp):
         self.inp = inp
-        self.out = get_conv_size(inp, self.kernel_size, self.stride, self.padding)
+        self.out = get_conv_size(inp, self.size, self.stride, self.padding)
 
     def op(self, X):
-        return pooling2d(X, self.size, self.mode)
+        return pooling2d(X, self.size, self.stride, self.padding, self.mode)

@@ -1,5 +1,6 @@
 import tensorflow as tf
 from .convolution import get_conv_size
+from .functions import split_func
 
 def pooling2d(X, size, stride, padding, mode="max"):
     if len(X.shape) == 4:
@@ -25,5 +26,5 @@ def pooling2d_multi_calc(X, size, stride, padding, mode):
     # assume channel-last syntax
     res = []
     for x in tf.split(X, X.shape[2], axis=2):
-        res.append(tf.squeeze(x, 2), size, stride, padding, mode)
+        res.append(pooling2d(tf.squeeze(x, 2), size, stride, padding, mode))
     return tf.concat(res, 2)
