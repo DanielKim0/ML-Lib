@@ -8,6 +8,7 @@ from optimizers.sgd import SGD
 from layers.core.conv2d import *
 from layers.core.dense import *
 from layers.pooling import *
+from layers.flatten import *
 from comp.activation import *
 
 def main():
