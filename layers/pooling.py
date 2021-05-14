@@ -4,7 +4,7 @@ from comp.pooling import *
 from comp.convolution import get_conv_size
 
 class Pooling(Layer):
-    def __init__(self, size, stride, padding, mode="max"):
+    def __init__(self, size, stride, padding="none", mode="max"):
         super().__init__()
         self.size = size
         self.stride = stride

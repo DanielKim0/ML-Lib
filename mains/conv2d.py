@@ -15,11 +15,18 @@ def main():
     gen = MNISTGen()
     (X_train, y_train), (X_test, y_test) = gen.create_batch()
 
-    # model initialization
+    # model initialization, LeNet architecture
     model = SequentialModel([
-        Conv2DLayer((nodes), kernel_size)
+        Conv2DLayer(6, 5, act=sigmoid, padding="same"),
+        Pooling(2, [2, 2], mode="average"),
+        Conv2DLayer(16, 5, act=sigmoid),
+        Pooling(2, [2, 2], mode="average")
+        Flatten(),
+        DenseLayer(120, activation="sigmoid"),
+        DenseLayer(84, activation="sigmoid"),
+        DenseLayer(10, activation="sigmoid"),
     ])
-    loss = MSE()
+    loss = CrossEntropy()
     opt = SGD(.03)
     # model.save("test.logistic")
 
