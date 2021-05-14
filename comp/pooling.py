@@ -1,5 +1,5 @@
 import tensorflow as tf
-from convolution import get_conv_size
+from .convolution import get_conv_size
 
 def pooling2d(X, size, stride, padding, mode="max"):
     if len(X.shape) == 4:

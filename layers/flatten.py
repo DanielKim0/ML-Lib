@@ -1,6 +1,6 @@
 import math
 import tensorflow as tf
-from base import Layer
+from .base import Layer
 
 class Flatten(Layer):
     def __init__(self):

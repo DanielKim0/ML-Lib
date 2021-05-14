@@ -21,7 +21,7 @@ def main():
         Conv2DLayer(6, 5, act=sigmoid, padding="same"),
         Pooling(2, [2, 2], mode="average"),
         Conv2DLayer(16, 5, act=sigmoid),
-        Pooling(2, [2, 2], mode="average")
+        Pooling(2, [2, 2], mode="average"),
         Flatten(),
         DenseLayer(120, activation="sigmoid"),
         DenseLayer(84, activation="sigmoid"),

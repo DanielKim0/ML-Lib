@@ -1,5 +1,5 @@
 import tensorflow as tf
-from base import Layer
+from .base import Layer
 from comp.pooling import *
 from comp.convolution import get_conv_size
 

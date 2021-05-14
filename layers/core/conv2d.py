@@ -1,4 +1,5 @@
 import tensorflow as tf
+from .core import CoreLayer
 from comp.convolution import *
 from comp.param_init import *
 

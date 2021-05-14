@@ -1,5 +1,5 @@
 import tensorflow as tf
-from functions import split_func
+from .functions import split_func
 
 # 4d input with dimensions: batch, h, w, c_in
 # 4d kernel with dimensions: k_h, k_w, c_in, c_out
