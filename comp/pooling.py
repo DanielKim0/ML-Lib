@@ -26,5 +26,5 @@ def pooling2d_multi_calc(X, size, stride, padding, mode):
     # assume channel-last syntax
     res = []
     for x in tf.split(X, X.shape[2], axis=2):
-        res.append(pooling2d(tf.squeeze(x, 2), size, stride, padding, mode))
-    return tf.concat(res, 2)
+        res.append(pooling2d_calc(tf.squeeze(x, 2), size, stride, padding, mode))
+    return tf.stack(res, 2)

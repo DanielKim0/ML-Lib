@@ -46,9 +46,7 @@ class SequentialModel(TFModel):
 
         def net(X, model):
             for layer in model:
-                "layer"
                 X = layer.op(X)
-            "complete"
             return X
         self.model = net
 
@@ -92,6 +90,7 @@ class SequentialModel(TFModel):
             l = self.loss.compare(y, self.model(X, self.layers))
             l += self.gather_loss()
         grads = g.gradient(l, self.gather_weights())
+        print(grads)
         self.opt.update_model(self.layers, grads, self.batch_size)
         # print(grads)
 
