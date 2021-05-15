@@ -92,7 +92,6 @@ class SequentialModel(TFModel):
         grads = g.gradient(l, self.gather_weights())
         print(grads)
         self.opt.update_model(self.layers, grads, self.batch_size)
-        # print(grads)
 
     def predict(self, X):
         return self.model(X, self.layers)

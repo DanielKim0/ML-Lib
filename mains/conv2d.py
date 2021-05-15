@@ -15,20 +15,27 @@ def main():
     # data generation
     gen = MNISTGen()
     (X_train, y_train), (X_test, y_test) = gen.create_batch()
-    X_train = tf.split(X_train, int(X_train.shape[0]/600), axis=0)[0]
-    y_train = tf.split(y_train, int(y_train.shape[0]/600), axis=0)[0]
+    X_train = tf.split(X_train, int(X_train.shape[0]/6000), axis=0)[0]
+    y_train = tf.split(y_train, int(y_train.shape[0]/6000), axis=0)[0]
 
     # model initialization, LeNet architecture
+    # model = SequentialModel([
+    #     Conv2DLayer(6, 5, act=sigmoid, padding="same"),
+    #     Pooling(2, [2, 2], mode="average"),
+    #     Conv2DLayer(16, 5, act=sigmoid),
+    #     Pooling(2, [2, 2], mode="average"),
+    #     Flatten(),
+    #     DenseLayer(120, act=sigmoid),
+    #     DenseLayer(84, act=sigmoid),
+    #     DenseLayer(10, act=sigmoid),
+    # ])
+
     model = SequentialModel([
         Conv2DLayer(6, 5, act=sigmoid, padding="same"),
-        Pooling(2, [2, 2], mode="average"),
-        Conv2DLayer(16, 5, act=sigmoid),
-        Pooling(2, [2, 2], mode="average"),
         Flatten(),
-        DenseLayer(120, act=sigmoid),
-        DenseLayer(84, act=sigmoid),
         DenseLayer(10, act=sigmoid),
     ])
+
     loss = CrossEntropy()
     opt = SGD(.3)
     # model.save("test.logistic")

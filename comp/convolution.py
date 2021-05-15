@@ -1,15 +1,17 @@
 import tensorflow as tf
 from .functions import split_func
+from .padding import * 
 
 # 4d input with dimensions: batch, h, w, c_in
 # 4d kernel with dimensions: k_h, k_w, c_in, c_out
 # output: batch, o_h, o_w, c_out
 
 def get_conv_size(inp, ker, stride, padding):
-    if padding == "same":
-        size = [int(inp[i]/stride[i]) for i in range(len(stride))]
-    else:
-        size = [int((inp[i]-ker[i]+1)/stride[i]) for i in range(len(stride))]
+    if padding in ["none", "valid"]:
+        size = [math.ceil((inp[i]-ker[i]+1)/stride[i]) for i in range(len(stride))]
+    elif padding == "same":
+        size = [math.ceil(inp[i]/stride[i]) for i in range(len(stride))]
+        
     if len(inp) == 3: # if input has channel input
         if len(ker) == 4: # convolution
             size.append(ker[3])
@@ -26,11 +28,10 @@ def conv2d(X, K, stride, padding):
 def conv2d_calc(X, K, stride, padding):
     h, w = K.shape
     Y = tf.Variable(tf.zeros(get_conv_size(X.shape, K.shape, stride, padding)))
-    if padding == "same":
-        X = tf.pad(X, [[h-1, h-1], [w-1, w-1]])
-    for i in range(0, Y.shape[0], stride[0]):
-        for j in range(0, Y.shape[1], stride[1]):
-            Y[i,j].assign(tf.reduce_sum(X[i:i+h,j:j+w] * K))
+    X = pad_input(X, K, stride, padding)
+    for i in range(Y.shape[0]):
+        for j in range(Y.shape[1]):
+            Y[i, j].assign(tf.reduce_sum(X[i*stride[0]:i*stride[0]+h,j*stride[1]:j*stride[1]+w] * K))
     return Y
 
 def conv2d_multi_calc(X, kernel, stride, padding):
