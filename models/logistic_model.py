@@ -1,10 +1,10 @@
 import tensorflow as tf
-
-from .tf_model import TFModel
-from utils.compress import *
 from comp.models import logreg
-from comp.functions import *
-from metrics.class_accuracy import *
+from comp.functions import split_func
+from metrics.class_accuracy import ClassAccuracy
+from utils.compress import *
+from .tf_model import TFModel
+
 
 class LogisticModel(TFModel):
     def __init__(self):

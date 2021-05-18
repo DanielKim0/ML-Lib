@@ -1,7 +1,7 @@
 import tensorflow as tf
 from data_gen.polynomial_gen import PolynomialGen
-from models.mlp_generic_model import MLPGenericModel
 from metrics.mse import MSE
+from models.mlp_generic_model import MLPGenericModel
 from optimizers.sgd import SGD
 
 def main():

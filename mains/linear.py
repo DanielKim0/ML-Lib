@@ -1,8 +1,7 @@
 import tensorflow as tf
-
 from data_gen.linear_gen import LinearGen
-from models.linear_model import LinearModel
 from metrics.mse import MSE
+from models.linear_model import LinearModel
 
 def main():
     # data generation

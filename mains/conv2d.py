@@ -1,15 +1,14 @@
 import tensorflow as tf
-
+from comp.activation import sigmoid
 from data_gen.mnist_gen import MNISTGen
+from metrics.class_accuracy import ClassAccuracy
+from metrics.cross_entropy import CrossEntropy
 from models.sequential import SequentialModel
-from metrics.class_accuracy import *
-from metrics.cross_entropy import *
+from layers.core.conv2d import Conv2DLayer
+from layers.core.dense import DenseLayer
+from layers.pooling import PoolingLayer
+from layers.flatten import FlattenLayer
 from optimizers.sgd import SGD
-from layers.core.conv2d import *
-from layers.core.dense import *
-from layers.pooling import *
-from layers.flatten import *
-from comp.activation import *
 
 def main():
     # data generation

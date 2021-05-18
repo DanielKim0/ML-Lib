@@ -1,7 +1,5 @@
 import tensorflow as tf
-
 from .tf_model import TFModel
-
 
 class TemplateTFModel(TFModel):
     def __init__(self):

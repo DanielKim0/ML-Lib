@@ -1,6 +1,7 @@
 from base import Layer
 from comp.activation import *
 
+
 class ReLULayer(Layer):
     def __init__(self):
         super().__init__()

@@ -1,8 +1,7 @@
 import tensorflow as tf
-
-from .tf_model import TFModel
-from utils.compress import *
 from comp.models import linreg
+from utils.compress import *
+from .tf_model import TFModel
 
 
 class LinearTFModel(TFModel):

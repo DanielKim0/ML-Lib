@@ -1,6 +1,7 @@
 import tensorflow as tf
-from .base_gen import BaseGen
 from comp.models import softmax
+from .base_gen import BaseGen
+
 
 class LogisticGen(BaseGen):
     def __init__(self, w, b, stddev):

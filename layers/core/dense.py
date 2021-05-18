@@ -1,6 +1,7 @@
 import tensorflow as tf
+from comp.param_init import normal
 from .core import CoreLayer
-from comp.param_init import *
+
 
 class DenseLayer(CoreLayer):
     def __init__(self, nodes, act=None, reg=None, param=None):

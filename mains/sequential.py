@@ -5,7 +5,7 @@ from models.sequential import SequentialModel
 from metrics.mse import MSE
 from optimizers.sgd import SGD
 from layers.core.dense import DenseLayer
-from comp.activation import *
+from comp.activation import relu
 
 def main():
     # data generation

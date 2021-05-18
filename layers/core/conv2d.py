@@ -1,7 +1,8 @@
 import tensorflow as tf
+from comp.convolution import conv2d
+from comp.param_init import normal
 from .core import CoreLayer
-from comp.convolution import *
-from comp.param_init import *
+
 
 class Conv2DLayer(CoreLayer):
     def __init__(self, filters, kernel_size, stride=(1,1), padding="valid", act=None, reg=None, param=None):

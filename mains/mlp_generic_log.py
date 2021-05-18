@@ -1,10 +1,10 @@
 import tensorflow as tf
-from models.mlp_generic_model import MLPGenericModel
 from data_gen.logistic_gen import LogisticGen
 from metrics.cross_entropy import CrossEntropy
 from metrics.class_accuracy import ClassAccuracy
+from models.mlp_generic_model import MLPGenericModel
 
-def main2():
+def main():
     # data generation
     w_true = [
         [1, 2, 3, 4],

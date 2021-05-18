@@ -1,6 +1,7 @@
-from math import prod
 import tensorflow as tf
+from math import prod
 from .base import Layer
+
 
 class FlattenLayer(Layer):
     def __init__(self):

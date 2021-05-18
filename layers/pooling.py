@@ -1,7 +1,8 @@
 import tensorflow as tf
-from .base import Layer
-from comp.pooling import *
+from comp.pooling import pooling2d
 from comp.convolution import get_conv_size
+from .base import Layer
+
 
 class PoolingLayer(Layer):
     def __init__(self, size, stride, padding="none", mode="max"):

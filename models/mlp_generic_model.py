@@ -1,11 +1,11 @@
 import tensorflow as tf
-
-from .tf_model import TFModel
-from comp.activation import *
-from utils.compress import *
+from comp.activation import relu
 from comp.models import linreg
-from comp.functions import *
-from metrics.class_accuracy import *
+from comp.functions import split_func
+from metrics.class_accuracy import ClassAccuracy
+from utils.compress import *
+from .tf_model import TFModel
+
 
 class MLPGenericModel(TFModel):
     def __init__(self):
