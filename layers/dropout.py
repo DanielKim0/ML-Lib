@@ -1,7 +1,7 @@
 import tensorflow as tf
 from base import Layer
 
-class Dropout(Layer):
+class DropoutLayer(Layer):
     def __init__(self, dropout=0.1):
         super().__init__()
         self.dropout = dropout

@@ -2,7 +2,7 @@ from math import prod
 import tensorflow as tf
 from .base import Layer
 
-class Flatten(Layer):
+class FlattenLayer(Layer):
     def __init__(self):
         super().__init__()
         
