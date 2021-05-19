@@ -12,10 +12,27 @@ class MLPModel(TFModel):
         super().__init__()
 
     def __str__(self):
-        pass
+        s = "Multilayer Perceptron Model\n"
+        if self.model_fit:
+            s += "Currently fit\n"
+            s += f"w1.shape: {self.w.shape}\n"
+            s += f"w2.shape: {self.w.shape}\n"
+            s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
+            s += f"loss: {self.loss}\n"
+            s += f"opt: {self.opt}\n"
+            s += f"batch_size: {self.batch_size}\n"
+            s += f"mean: {self.mean}\n"
+            s += f"stddev: {self.stddev}\n"
+        else:
+            s += "Currently not fit\n"
+        return s
 
     def __repr__(self):
-        pass
+        if self.model_fit:
+            s = f"MLPModel(model_fit={False})"
+        else:
+            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+        return s
 
     def save(self):
         super().save()

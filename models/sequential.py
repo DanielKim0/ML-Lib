@@ -12,10 +12,30 @@ class SequentialModel(TFModel):
         self.layers = layers
 
     def __str__(self):
-        pass
+        s = "Sequential Model\n"
+        if self.model_fit:
+            s += "Currently fit\n"
+            s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
+            s += f"loss: {self.loss}\n"
+            s += f"opt: {self.opt}\n"
+            s += f"batch_size: {self.batch_size}\n"
+            s += f"mean: {self.mean}\n"
+            s += f"stddev: {self.stddev}\n"
+        else:
+            s += "Currently not fit\n"
+        
+        for i in self.layers:
+            s += f"\nLayer {i}:\n{self.layers[i].__str__}\n"
+        return s
 
     def __repr__(self):
-        pass
+        if self.model_fit:
+            s = f"MLPModel(model_fit={False})"
+        else:
+            s = f"MLPModel(model_fit={True}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+        for i in self.layers:
+            s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
+        return s
 
     def save(self):
         super().save()
@@ -90,7 +110,6 @@ class SequentialModel(TFModel):
             l = self.loss.compare(y, self.model(X, self.layers))
             l += self.gather_loss()
         grads = g.gradient(l, self.gather_weights())
-        print(grads)
         self.opt.update_model(self.layers, grads, self.batch_size)
 
     def predict(self, X):
