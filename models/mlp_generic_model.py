@@ -20,6 +20,7 @@ class MLPGenericModel(TFModel):
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
+            s += f"dims: {self.dims}\n"
             s += f"batch_size: {self.batch_size}\n"
             s += f"mean: {self.mean}\n"
             s += f"stddev: {self.stddev}\n"
@@ -32,14 +33,41 @@ class MLPGenericModel(TFModel):
             s = f"MLPGenericModel(model_fit={False})"
         else:
             s = " ".join([f"w{i}.shape: {self.w[i].shape}," for i in range(len(self.w))])
-            s = f"MLPGenericModel(model_fit={True}, {s} loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+            s = f"MLPGenericModel(model_fit={True}, {s} loss={self.loss}, opt={self.opt}, dims={self.dims}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
         return s
 
-    def save(self):
+    def save(self, path):
         super().save()
+        data = {
+            "loss": self.loss,
+            "dims": self.dims,
+            "act": self.act,
+            "batch_size": self.batch_size,
+            "num_epochs": self.num_epochs,
+            "curr_epoch": self.curr_epoch,
+            "model": self.model,
+            "opt": self.opt,
+        }
+        arrays = {
+            "w": self.w,
+            "b": self.b,            
+        }
+        compress_files(path, data, arrays)
 
-    def load(self):
-        pass
+    def load(self, path):
+        data, arrays = uncompress_files(path)
+
+        self.loss = data["loss"]
+        self.act = data["act"]
+        self.dims = data["dims"]
+        self.opt = data["opt"]
+        self.num_epochs = data["num_epochs"]
+        self.curr_epoch = data["curr_epoch"]
+        self.model = data["model"]
+        self.hiddens = data["hiddens"]
+
+        self.w = arrays["w"]
+        self.b = arrays["b"]
 
     def validate_fit(self):
         pass
@@ -94,7 +122,6 @@ class MLPGenericModel(TFModel):
         with tf.GradientTape() as g:
             l = self.loss.compare(y, self.model(X, self.w, self.b, self.act))
         grads = g.gradient(l, self.w + self.b)
-        # print(grads)
         self.opt.update(self.w, grads[:int(len(grads)/2)], self.batch_size)
         self.opt.update(self.b, grads[int(len(grads)/2):], self.batch_size)
 

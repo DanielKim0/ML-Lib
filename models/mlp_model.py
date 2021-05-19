@@ -20,6 +20,7 @@ class MLPModel(TFModel):
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
+            s += f"act: {self.act}\n"
             s += f"batch_size: {self.batch_size}\n"
             s += f"mean: {self.mean}\n"
             s += f"stddev: {self.stddev}\n"
@@ -31,14 +32,44 @@ class MLPModel(TFModel):
         if self.model_fit:
             s = f"MLPModel(model_fit={False})"
         else:
-            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
         return s
 
-    def save(self):
+    def save(self, path):
         super().save()
+        data = {
+            "loss": self.loss,
+            "hiddens": self.hiddens,
+            "batch_size": self.batch_size,
+            "num_epochs": self.num_epochs,
+            "curr_epoch": self.curr_epoch,
+            "model": self.model,
+            "opt": self.opt,
+            "act": self.act,
+        }
+        arrays = {
+            "w1": self.w1,
+            "b1": self.b1,
+            "w2": self.w2,
+            "b2": self.b2,
+        }
+        compress_files(path, data, arrays)
 
-    def load(self):
-        pass
+    def load(self, path):
+        data, arrays = uncompress_files(path)
+
+        self.loss = data["loss"]
+        self.opt = data["opt"]
+        self.act = data["act"]
+        self.num_epochs = data["num_epochs"]
+        self.curr_epoch = data["curr_epoch"]
+        self.model = data["model"]
+        self.hiddens = data["hiddens"]
+
+        self.w1 = arrays["w1"]
+        self.b1 = arrays["b1"]
+        self.w2 = arrays["w2"]
+        self.b2 = arrays["b2"]
 
     def validate_fit(self):
         pass
