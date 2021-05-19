@@ -7,6 +7,12 @@ class DropoutLayer(Layer):
         super().__init__()
         self.dropout = dropout
 
+    def __str__(self):
+        return f"Dropout Layer: dropout={self.droupout}"
+
+    def __repr__(self):
+        return f"DropoutLayer(dropout={self.dropout})"
+
     def op(self, X):
         mask = tf.random.uniform(shape=tf.shape(X), minval=0, maxval=1) < (1.0 - dropout)
         return tf.cast(maxk, dtype=tf.float32) * X / (1.0-dropout)

@@ -12,6 +12,7 @@ class CoreLayer(Layer):
         self.act = act
         self.reg = reg
         self.param = param
+        self.initialized = False
 
     def apply_grad(self, grads):
         for param, grad in zip([self.w, self.b], grads):
@@ -34,7 +35,7 @@ class CoreLayer(Layer):
 
     @abstractmethod
     def init_weights(self):
-        pass
+        self.initialized = True
 
     @abstractmethod
     def call(self, X):

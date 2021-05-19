@@ -9,6 +9,28 @@ class DenseLayer(CoreLayer):
         # w_mean and w_stddev are now in "param"
         self.nodes = nodes
 
+    def __str__(self):
+        s = "Dense Layer\n"
+        if self.initialized:
+            s += "Currently initialized\n"
+            s += f"inp: {self.inp}\n"
+            s += f"out: {self.out}\n"
+            s += f"w.shape: {self.w.shape}\n"
+        else:
+            s += "Currently not initialized\n"
+        s += f"nodes: {self.nodes}\n"
+        s += f"act: {self.act}\n"
+        s += f"reg: {self.reg}\n"
+        s += f"param: {self.param}\n"
+        return s
+
+    def __repr__(self):
+        if self.initialized:
+            s = f"DenseLayer(initialized={False}, nodes={self.nodes}, act={self.act}, reg={self.reg}, param={self.param})"
+        else:
+            s = f"DenseLayer(initialized={True}, inp={self.inp}, out={self.out}, w.shape={self.w.shape}, nodes={self.nodes}, act={self.act}, reg={self.reg}, param={self.param})"
+        return s
+
     def set_dims(self, inp):
         self.inp = inp
         self.out = [self.nodes]
@@ -19,6 +41,7 @@ class DenseLayer(CoreLayer):
             self.w = normal(0, 0.1)((self.inp[0], self.out[0]))
         else:
             self.w = self.param((self.inp[0], self.out[0]))
+        super().init_weights()
 
     def call(self, X):
         return tf.matmul(X, self.w) + self.b
