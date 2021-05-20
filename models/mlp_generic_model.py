@@ -22,8 +22,6 @@ class MLPGenericModel(TFModel):
             s += f"opt: {self.opt}\n"
             s += f"dims: {self.dims}\n"
             s += f"batch_size: {self.batch_size}\n"
-            s += f"mean: {self.mean}\n"
-            s += f"stddev: {self.stddev}\n"
         else:
             s += "Currently not fit\n"
         return s
@@ -33,7 +31,7 @@ class MLPGenericModel(TFModel):
             s = f"MLPGenericModel(model_fit={False})"
         else:
             s = " ".join([f"w{i}.shape: {self.w[i].shape}," for i in range(len(self.w))])
-            s = f"MLPGenericModel(model_fit={True}, {s} loss={self.loss}, opt={self.opt}, dims={self.dims}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+            s = f"MLPGenericModel(model_fit={True}, {s} loss={self.loss}, opt={self.opt}, dims={self.dims}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
         return s
 
     def save(self, path):
@@ -45,7 +43,6 @@ class MLPGenericModel(TFModel):
             "batch_size": self.batch_size,
             "num_epochs": self.num_epochs,
             "curr_epoch": self.curr_epoch,
-            "model": self.model,
             "opt": self.opt,
         }
         arrays = {
@@ -63,8 +60,7 @@ class MLPGenericModel(TFModel):
         self.opt = data["opt"]
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
-        self.model = data["model"]
-        self.hiddens = data["hiddens"]
+        self.model = self.create_net()
 
         self.w = arrays["w"]
         self.b = arrays["b"]
@@ -75,6 +71,13 @@ class MLPGenericModel(TFModel):
     def validate_predict(self):
         pass
 
+    def create_net(self):
+        def net(X, w, b, act):
+            for i in range(len(w)-1):
+                X = act[i](tf.matmul(X, w[i]) + b[i])
+            return tf.matmul(X, w[-1]) + b[-1]
+        return net
+
     def build_model(self, dims, w_mean, w_stddev):
         # dims: [inputs, ..., hiddens, ..., outputs], with inputs inferred from X in fit()
         self.w = []
@@ -83,12 +86,7 @@ class MLPGenericModel(TFModel):
         for i in range(len(dims)-1):
             self.w.append(tf.Variable(tf.random.normal((dims[i], dims[i+1]), mean=w_mean, stddev=w_stddev), trainable=True))
             self.b.append(tf.Variable(tf.zeros(dims[i+1]), trainable=True))
-
-        def net(X, w, b, act):
-            for i in range(len(w)-1):
-                X = act[i](tf.matmul(X, w[i]) + b[i])
-            return tf.matmul(X, w[-1]) + b[-1]
-        self.model = net
+        self.model = self.create_net()
 
     def fit(self, X, y, dims, loss, opt, act=relu, batch_size=16, num_epochs=32, mean=0, stddev=.1):
         # data casts
@@ -126,4 +124,4 @@ class MLPGenericModel(TFModel):
         self.opt.update(self.b, grads[int(len(grads)/2):], self.batch_size)
 
     def predict(self, X):
-        return self.model(X, self.w, self.b)
+        return self.model(X, self.w, self.b, self.act)

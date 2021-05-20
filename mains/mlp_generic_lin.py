@@ -12,11 +12,11 @@ def main():
     # model initialization
     model = MLPGenericModel()
     loss = MSE()
-    opt = SGD(.03)
+    opt = SGD(.01)
 
     # model fitting
     print(model)
-    model.fit(X, y, [32, 16, 1], loss, opt)
+    model.fit(X, y, [32, 16, 1], loss, opt, num_epochs=16)
     print(model)
 
     # model prediction

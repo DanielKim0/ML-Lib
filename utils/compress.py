@@ -12,7 +12,11 @@ def compress_files(path, data=None, arrays=None):
     try:
         if arrays:
             for key in arrays:
-                np.save(os.path.join("temp", key + ".npy"), arrays[key].numpy())
+                if isinstance(arrays[key], list):
+                    item = [i.numpy() for i in arrays[key]]
+                    np.save(os.path.join("temp", key + ".npy"), item)
+                else:
+                    np.save(os.path.join("temp", key + ".npy"), arrays[key].numpy())
 
         if data:
             with open(os.path.join("temp", "meta.pickle"), "wb") as f:
@@ -41,7 +45,7 @@ def uncompress_files(path):
             for name in files:
                 if name != "meta.pickle":
                     key = os.path.splitext(os.path.basename(name))[0]
-                    arrays[key] = np.load(os.path.join("temp", name))
+                    arrays[key] = np.load(os.path.join("temp", name), allow_pickle=True)
         return data, arrays
     finally:
         shutil.rmtree("temp")
