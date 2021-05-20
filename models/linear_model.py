@@ -20,9 +20,9 @@ class LinearModel(BaseModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"LinearModel(model_fit={False})"
-        else:
             s = f"LinearModel(model_fit={True}, w={self.w}, intercept={self.intercept})"
+        else:
+            s = f"LinearModel(model_fit={False})"
         return s
 
     def save(self, path):

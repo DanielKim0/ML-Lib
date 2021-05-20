@@ -25,9 +25,9 @@ class LogisticModel(TFModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"LogisticModel(model_fit={False})"
-        else:
             s = f"LogisticModel(model_fit={True}, w={self.w}, b={self.b}, classes={self.classes}, loss={self.loss}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, model={self.model}, opt={self.opt})"
+        else:
+            s = f"LogisticModel(model_fit={False})"
         return s
 
     def save(self, path):

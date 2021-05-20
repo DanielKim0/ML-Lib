@@ -28,10 +28,10 @@ class MLPGenericModel(TFModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"MLPGenericModel(model_fit={False})"
-        else:
             s = " ".join([f"w{i}.shape: {self.w[i].shape}," for i in range(len(self.w))])
             s = f"MLPGenericModel(model_fit={True}, {s} loss={self.loss}, opt={self.opt}, dims={self.dims}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
+        else:
+            s = f"MLPGenericModel(model_fit={False})"
         return s
 
     def save(self, path):

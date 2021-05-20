@@ -28,9 +28,9 @@ class MLPModel(TFModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"MLPModel(model_fit={False})"
-        else:
             s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
+        else:
+            s = f"MLPModel(model_fit={False})"
         return s
 
     def save(self, path):

@@ -22,9 +22,9 @@ class LinearTFModel(TFModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"LinearTFModel(model_fit={False})"
-        else:
             s = f"LinearTFModel(model_fit={True}, w={self.w}, b={self.b}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, model={self.model}, update={self.update})"
+        else:
+            s = f"LinearTFModel(model_fit={False})"
         return s
 
     def save(self, path):

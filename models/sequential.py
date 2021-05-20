@@ -18,21 +18,21 @@ class SequentialModel(TFModel):
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
-            s += f"batch_size: {self.batch_size}\n"
+            s += f"batch_size: {self.batch_size}\n"                    
+            for i in range(len(self.layers)):
+                s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
         else:
             s += "Currently not fit\n"
-        
-        for i in self.layers:
-            s += f"\nLayer {i}:\n{self.layers[i].__str__}\n"
+
         return s
 
     def __repr__(self):
         if self.model_fit:
-            s = f"MLPModel(model_fit={False})"
-        else:
             s = f"MLPModel(model_fit={True}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
-        for i in range(len(self.layers)):
-            s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
+            for i in range(len(self.layers)):
+                s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
+        else:
+            s = f"MLPModel(model_fit={False})"
         return s
 
     def save(self):
