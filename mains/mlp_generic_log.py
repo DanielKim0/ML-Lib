@@ -3,6 +3,7 @@ from data_gen.logistic_gen import LogisticGen
 from metrics.cross_entropy import CrossEntropy
 from metrics.class_accuracy import ClassAccuracy
 from models.mlp_generic_model import MLPGenericModel
+from optimizers.sgd import SGD
 
 def main():
     # data generation
@@ -22,7 +23,7 @@ def main():
 
     # model fitting
     print(model)
-    model.fit(X, y, 16, len(w_true[0]), loss, opt, num_epochs=16)
+    model.fit(X, y, [16, len(w_true[0])], loss, opt, num_epochs=16)
     print(model)
 
     # model prediction
