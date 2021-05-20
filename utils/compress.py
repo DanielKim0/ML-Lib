@@ -7,21 +7,25 @@ def save_layers(layers):
     os.mkdir(os.path.join("temp", "layers"))
     for i in range(len(layers)):
         if layers[i].weighted:
-            data = self.prep_save(layer)
-            pickle.dump(os.path.join("temp", "layers", f"{str(i)}_layer.pickle"), data)
-            np.save(os.path.join("temp", "layers", f"{str(i)}_w.pickle"), data[0].numpy())
-            np.save(os.path.join("temp", "layers", f"{str(i)}_b.pickle"), data[1].numpy())
-            layer.finish_save(data)
+            data = layers[i].prep_save()
+            with open(os.path.join("temp", "layers", f"{str(i)}_layer.pickle"), "wb") as f:
+                pickle.dump(layers[i], f)
+            np.save(os.path.join("temp", "layers", f"{str(i)}_w"), data[0].numpy())
+            np.save(os.path.join("temp", "layers", f"{str(i)}_b"), data[1].numpy())
+            layers[i].finish_save(data)
+        else:
+            with open(os.path.join("temp", "layers", f"{str(i)}_layer.pickle"), "wb") as f:
+                pickle.dump(layers[i], f)
 
 def load_layers(path):
     layers = []
     count = 0
 
     while os.path.exists(os.path.join(path, f"{str(count)}_layer.pickle")):
-        layer = pickle.load(os.path.join(path, f"{str(count)}_layer.pickle"))
-        if os.path.exists(os.path.join(path, f"{str(count)}_w.pickle")):
-            layer.w = np.load(os.path.join(path, f"{str(count)}_w.pickle"))
-            layer.b = os.path.join(path, f"{str(count)}_b.pickle")
+        layer = pickle.load(open(os.path.join(path, f"{str(count)}_layer.pickle"), "rb"))
+        if os.path.exists(os.path.join(path, f"{str(count)}_w.npy")):
+            layer.w = np.load(os.path.join(path, f"{str(count)}_w.npy"))
+            layer.b = np.load(os.path.join(path, f"{str(count)}_b.npy"))
         layers.append(layer)
         count += 1
     return layers
@@ -42,7 +46,8 @@ def compress_files(path, data=None, arrays=None, layers=None):
                     np.save(os.path.join("temp", key + ".npy"), arrays[key].numpy())
 
         if data:
-            pickle.dump(os.path.join("temp", "meta.pickle"), data)
+            with open(os.path.join("temp", "meta.pickle"), "wb") as f:
+                pickle.dump(data, f)
 
         if layers:
             save_layers(layers)
@@ -66,8 +71,8 @@ def uncompress_files(path):
             data = pickle.load(open(os.path.join("temp", "meta.pickle"), "rb"))
 
         arrays = dict()
-        for _, _, files in os.walk("temp"):
-            for name in files:
+        for name in os.listdir("temp"):
+            if os.path.isfile(os.path.join("temp", name)):
                 if name != "meta.pickle":
                     key = os.path.splitext(os.path.basename(name))[0]
                     arrays[key] = np.load(os.path.join("temp", name))

@@ -7,7 +7,7 @@ from .tf_model import TFModel
 
 
 class SequentialModel(TFModel):
-    def __init__(self, layers):
+    def __init__(self, layers=None):
         super().__init__()
         self.layers = layers
 
@@ -18,11 +18,11 @@ class SequentialModel(TFModel):
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
-            s += f"batch_size: {self.batch_size}\n"                    
-            for i in range(len(self.layers)):
-                s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
+            s += f"batch_size: {self.batch_size}\n"
         else:
             s += "Currently not fit\n"
+        for i in range(len(self.layers)):
+            s += f"\nLayer {i}: {self.layers[i].__str__()}"
 
         return s
 
@@ -30,12 +30,14 @@ class SequentialModel(TFModel):
         if self.model_fit:
             s = f"MLPModel(model_fit={True}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
             for i in range(len(self.layers)):
-                s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
+                s += f"\nLayer {i}: {self.layers[i].__repr__()}"
         else:
             s = f"MLPModel(model_fit={False})"
+        for i in range(len(self.layers)):
+            s += f"\nLayer {i}: {self.layers[i].__repr__()}"
         return s
 
-    def save(self):
+    def save(self, path):
         super().save()
         data = {
             "loss": self.loss,
@@ -46,16 +48,16 @@ class SequentialModel(TFModel):
         }
         compress_files(path, data, None, self.layers)
 
-    def load(self):
-        data, arrays, layers = uncompress_files(path)
+    def load(self, path):
+        data, arrays = uncompress_files(path)
 
+        self.layers = data["layers"]
         self.loss = data["loss"]
         self.opt = data["opt"]
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
-        self.batch_size = data["batch_size"]
-        
-        self.layers = layers
+        self.batch_size = data["batch_size"]    
+        self.model = self.create_net()    
 
     def validate_model(self):
         # model structure validation goes here
@@ -67,6 +69,13 @@ class SequentialModel(TFModel):
     def validate_predict(self):
         pass
 
+    def create_net(self):
+        def net(X, model):
+            for layer in model:
+                X = layer.op(X)
+            return X
+        return net
+
     def build_model(self, inp):
         # change to 2D+
         prev = []
@@ -77,12 +86,7 @@ class SequentialModel(TFModel):
             curr = layer.out
             if layer.weighted:
                 layer.init_weights()
-
-        def net(X, model):
-            for layer in model:
-                X = layer.op(X)
-            return X
-        self.model = net
+        self.model = self.create_net()
 
     def fit(self, X, y, loss, opt, batch_size=16, num_epochs=32):
         # data casts

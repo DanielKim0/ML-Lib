@@ -19,11 +19,11 @@ def main():
         DenseLayer(1)
     ])
     loss = MSE()
-    opt = SGD(.03)
+    opt = SGD(.01)
 
     # model fitting
     print(model)
-    model.fit(X, y, loss, opt)
+    model.fit(X, y, loss, opt, num_epochs=8)
     print(model)
 
     # model prediction
