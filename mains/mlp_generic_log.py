@@ -19,12 +19,32 @@ def main():
     model = MLPGenericModel()
     loss = CrossEntropy(default_logits=True)
     opt = SGD(.1)
-    # model.save("test.logistic")
 
     # model fitting
-    # print(model)
-    model.fit(X, y, [16, len(w_true[0])], loss, opt, num_epochs=16)
-    # print(model)
+    print(model)
+    model.fit(X, y, 16, len(w_true[0]), loss, opt, num_epochs=16)
+    print(model)
+
+    # model prediction
+    result = model.predict(X)
+    print(tf.reduce_mean(loss.compare(y, result)))
+    print(ClassAccuracy().compare(y, result))
+
+    # saving and loading
+    model.save("test_log.mlpgeneric")
+    loaded = MLPGenericModel()
+    loaded.load("test_log.mlpgeneric")
+    
+    # comparing saved and loaded models
+    result_loaded = loaded.predict(X)
+    tf.debugging.assert_equal(result, result_loaded)
+
+    # test data
+    X_new, y_new = gen.create_batch(512)
+    result = model.predict(X_new)
+    print(tf.reduce_mean(loss.compare(y_new, result)))
+    print(ClassAccuracy().compare(y_new, result))
+
 
 if __name__ == '__main__':
     main()

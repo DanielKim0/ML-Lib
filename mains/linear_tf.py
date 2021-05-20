@@ -13,7 +13,6 @@ def main():
     model = LinearTFModel()
     loss = MSE()
     opt = SGD(0.3)
-    # model.save("test.lineartf")
 
     # model fitting
     print(model)

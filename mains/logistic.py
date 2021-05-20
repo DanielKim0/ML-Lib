@@ -19,7 +19,6 @@ def main():
     model = LogisticModel()
     loss = CrossEntropy()
     opt = SGD(0.3)
-    # model.save("test.logistic")
 
     # model fitting
     print(model)

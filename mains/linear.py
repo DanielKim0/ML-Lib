@@ -11,7 +11,6 @@ def main():
     # model initialization
     model = LinearModel()
     loss = MSE()
-    # model.save("test.linear")
 
     # model fitting
     print(model)
