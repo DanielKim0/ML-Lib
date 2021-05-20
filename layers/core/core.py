@@ -33,6 +33,15 @@ class CoreLayer(Layer):
         else:
             return self.reg(self.w)
 
+    def prep_save(self):
+        data = [self.w, self.b]
+        self.w = None
+        self.b = None
+        return data
+
+    def finish_save(self, data):
+        self.w, self.b = data
+
     @abstractmethod
     def init_weights(self):
         self.initialized = True

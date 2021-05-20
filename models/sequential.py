@@ -19,8 +19,6 @@ class SequentialModel(TFModel):
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
             s += f"batch_size: {self.batch_size}\n"
-            s += f"mean: {self.mean}\n"
-            s += f"stddev: {self.stddev}\n"
         else:
             s += "Currently not fit\n"
         
@@ -33,15 +31,31 @@ class SequentialModel(TFModel):
             s = f"MLPModel(model_fit={False})"
         else:
             s = f"MLPModel(model_fit={True}, loss={self.loss}, opt={self.opt}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
-        for i in self.layers:
+        for i in range(len(self.layers)):
             s += f"\nLayer {i}: {self.layers[i].__repr__}\n"
         return s
 
     def save(self):
         super().save()
+        data = {
+            "loss": self.loss,
+            "batch_size": self.batch_size,
+            "num_epochs": self.num_epochs,
+            "curr_epoch": self.curr_epoch,
+            "opt": self.opt,
+        }
+        compress_files(path, data, None, self.layers)
 
     def load(self):
-        pass
+        data, arrays, layers = uncompress_files(path)
+
+        self.loss = data["loss"]
+        self.opt = data["opt"]
+        self.num_epochs = data["num_epochs"]
+        self.curr_epoch = data["curr_epoch"]
+        self.batch_size = data["batch_size"]
+        
+        self.layers = layers
 
     def validate_model(self):
         # model structure validation goes here
