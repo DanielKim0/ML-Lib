@@ -15,15 +15,13 @@ class MLPModel(TFModel):
         s = "Multilayer Perceptron Model\n"
         if self.model_fit:
             s += "Currently fit\n"
-            s += f"w1.shape: {self.w.shape}\n"
-            s += f"w2.shape: {self.w.shape}\n"
+            s += f"w1.shape: {self.w1.shape}\n"
+            s += f"w2.shape: {self.w2.shape}\n"
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
             s += f"act: {self.act}\n"
             s += f"batch_size: {self.batch_size}\n"
-            s += f"mean: {self.mean}\n"
-            s += f"stddev: {self.stddev}\n"
         else:
             s += "Currently not fit\n"
         return s
@@ -32,7 +30,7 @@ class MLPModel(TFModel):
         if self.model_fit:
             s = f"MLPModel(model_fit={False})"
         else:
-            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch}, mean={self.mean}, stddev={self.stddev})"
+            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
         return s
 
     def save(self, path):
@@ -43,7 +41,6 @@ class MLPModel(TFModel):
             "batch_size": self.batch_size,
             "num_epochs": self.num_epochs,
             "curr_epoch": self.curr_epoch,
-            "model": self.model,
             "opt": self.opt,
             "act": self.act,
         }
@@ -63,8 +60,8 @@ class MLPModel(TFModel):
         self.act = data["act"]
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
-        self.model = data["model"]
         self.hiddens = data["hiddens"]
+        self.model = self.create_net()
 
         self.w1 = arrays["w1"]
         self.b1 = arrays["b1"]
@@ -77,17 +74,19 @@ class MLPModel(TFModel):
     def validate_predict(self):
         pass
 
+    def create_net(self):
+        def net(X, w1, b1, w2, b2, act):
+            h = act(tf.matmul(X, w1) + b1)
+            o = tf.matmul(h, w2) + b2
+            return o
+        return net
+
     def build_model(self, inputs, hiddens, outputs, w_mean, w_stddev):
         self.w1 = tf.Variable(tf.random.normal((inputs, hiddens), mean=w_mean, stddev=w_stddev), trainable=True)
         self.b1 = tf.Variable(tf.zeros(hiddens), trainable=True)
         self.w2 = tf.Variable(tf.random.normal((hiddens, outputs), mean=w_mean, stddev=w_stddev), trainable=True)
         self.b2 = tf.Variable(tf.zeros(outputs), trainable=True)
-
-        def net(X, w1, b1, w2, b2, act):
-            h = act(tf.matmul(X, w1) + b1)
-            o = tf.matmul(h, w2) + b2
-            return o
-        self.model = net
+        self.model = self.create_net()
 
     def fit(self, X, y, hiddens, outputs, loss, opt, act=relu, batch_size=16, num_epochs=32, mean=0, stddev=.1):
         # data casts
@@ -110,7 +109,6 @@ class MLPModel(TFModel):
         for X_batch, y_batch in self.data_iter(X, y):
             self.train_step(X_batch, y_batch)
         train_l = self.loss.compare(y, self.model(X, self.w1, self.b1, self.w2, self.b2, self.act), from_logits=True)
-        print(self.model(X, self.w1, self.b1, self.w2, self.b2, self.act))
         print(f"epoch {self.curr_epoch}, loss {float(tf.reduce_mean(train_l)):f}, accuracy {float(ClassAccuracy().compare(y, self.model(X, self.w1, self.b1, self.w2, self.b2, self.act)))}")
 
     def train_step(self, X, y):
@@ -120,4 +118,4 @@ class MLPModel(TFModel):
         self.opt.update([self.w1, self.b1, self.w2, self.b2], [dw1, db1, dw2, db2], self.batch_size)
 
     def predict(self, X):
-        return self.model(X, self.w, self.b)
+        return self.model(X, self.w1, self.b1, self.w2, self.b2, self.act)
