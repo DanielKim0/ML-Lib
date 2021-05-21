@@ -15,7 +15,7 @@ class DropoutLayer(Layer):
 
     def validate(self):
         if self.dropout <= 0 or self.dropout >= 1:
-            return ValueError("")
+            return ValueError("Invalid dropout value!")
 
     def op(self, X):
         mask = tf.random.uniform(shape=tf.shape(X), minval=0, maxval=1) < (1.0 - dropout)

@@ -42,13 +42,13 @@ class LinearModel(BaseModel):
 
     def validate_fit(self, X, y):
         if X.shape[0] != y.shape[0]:
-            raise ValueError("")
+            raise ValueError("X and y sample dimension are not equal!")
         if y.shape[1] != 1:
-            raise ValueError("")
+            raise ValueError("Invalid sample output dimension!")
 
     def validate_predict(self, X):
         if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
+            raise ValueError("X and weight dimensions are not equal!")
 
     def fit(self, X, y, intercept=False):
         X, y, self.intercept = X, y, intercept

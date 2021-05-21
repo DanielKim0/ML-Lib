@@ -14,23 +14,21 @@ class TFModel(BaseModel):
 
     def validate_model(self, stddev):
         if stddev <= 0:
-            raise ValueError("")
+            raise ValueError("Invalid standard deviation!")
 
     def validate_fit(self, X, y, batch_size, num_epochs, opt, loss):
         if X.shape[0] != y.shape[0]:
-            raise ValueError("")
-        if y.shape[1] != 1:
-            raise ValueError("")
+            raise ValueError("X and y sample dimension are not equal!")
         if batch_size <= 0 or not isinstance(batch_size, int):
-            raise ValueError("")
+            raise ValueError("Invalid batch size!")
         if num_epochs <= 0 or not isinstance(num_epochs, int):
-            raise ValueError("")
+            raise ValueError("Invalid number of epochs!")
         opt.validate()
         loss.validate()
 
     def validate_predict(self, X):
         if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
+            raise ValueError("X and weight dimensions are not equal!")
 
     @abstractmethod
     def build_model(self, **kwargs):

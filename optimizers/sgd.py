@@ -13,7 +13,7 @@ class SGD(BaseOpt):
 
     def validate(self):
         if self.lr <= 0:
-            return ValueError("")
+            return ValueError("Invalid learning rate!")
 
     def update(self, params, grads, batch_size):
         for param, grad in zip(params, grads):

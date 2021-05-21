@@ -75,9 +75,9 @@ class MLPModel(TFModel):
     def validate_model(stddev, hiddens, output):
         super().validate_model(stddev)
         if hiddens <= 0 or not isinstance(hiddens, int):
-            raise ValueError("")
+            raise ValueError("Invalid hidden dimension value!")
         if output <= 0 or not isinstance(output, int):
-            raise ValueError("")
+            raise ValueError("Invalid output dimension value!")
 
     def create_net(self):
         def net(X, w1, b1, w2, b2, act):

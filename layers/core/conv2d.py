@@ -39,15 +39,15 @@ class Conv2DLayer(CoreLayer):
 
     def validate(self):
         if self.filters <= 0 or not isinstance(self.filters, int):
-            raise ValueError("")
+            raise ValueError("Invalid filter value!")
         for dim in self.kernel_size:
             if dim <= 0 or not isinstance(dim, int):
-                raise ValueError("")
+                raise ValueError("Invalid kernel size!")
         for dim in self.stride:
             if dim <= 0 or not isinstance(dim, int):
-                raise ValueError("")
+                raise ValueError("Invalid stride value!")
         if self.padding not in ["none", "valid", "same", "full"]:
-            raise ValueError("")
+            raise ValueError("Invalid padding value: should be one of 'none', 'valid', 'same', or 'full'!")
 
     def set_dims(self, inp):
         self.inp = inp

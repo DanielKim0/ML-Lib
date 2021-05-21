@@ -33,7 +33,7 @@ class DenseLayer(CoreLayer):
 
     def validate(self):
         if self.nodes <= 0 or not isinstance(self.nodes, int):
-            raise ValueError("")
+            raise ValueError("Invalid node amount!")
 
     def set_dims(self, inp):
         self.inp = inp

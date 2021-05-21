@@ -7,7 +7,7 @@ class BaseModel:
     @abstractmethod
     def save(self):
         if not self.model_fit:
-            raise ValueError("Cannot save model if it has not been fit!")
+            raise Exception("Cannot save model if it has not been fit!")
 
     @abstractmethod
     def load(self, path):

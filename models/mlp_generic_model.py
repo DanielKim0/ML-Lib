@@ -69,7 +69,7 @@ class MLPGenericModel(TFModel):
         super().validate_model(stddev)
         for dim in dims:
             if dims <= 0 or not isinstance(dims, int):
-                raise ValueError("")
+                raise ValueError("Invalid dimension value!")
 
     def create_net(self):
         def net(X, w, b, act):
