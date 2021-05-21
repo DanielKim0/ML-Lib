@@ -13,6 +13,9 @@ class Layer:
         self.inp = inp
         self.out = inp
 
+    def validate(self):
+        pass
+
     @abstractmethod
     def op(self):
         pass

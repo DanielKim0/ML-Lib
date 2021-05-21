@@ -11,6 +11,10 @@ class SGD(BaseOpt):
     def __repr__(self):
         return f"SGD(lr={self.lr})"
 
+    def validate(self):
+        if self.lr <= 0:
+            return ValueError("")
+
     def update(self, params, grads, batch_size):
         for param, grad in zip(params, grads):
             param.assign_sub(self.lr * grad / batch_size)

@@ -31,6 +31,10 @@ class DenseLayer(CoreLayer):
             s = f"DenseLayer(initialized={True}, inp={self.inp}, out={self.out}, w.shape={self.w.shape}, nodes={self.nodes}, act={self.act}, reg={self.reg}, param={self.param})"
         return s
 
+    def validate(self):
+        if self.nodes <= 0 or not isinstance(self.nodes, int):
+            raise ValueError("")
+
     def set_dims(self, inp):
         self.inp = inp
         self.out = [self.nodes]

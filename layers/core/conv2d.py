@@ -37,6 +37,18 @@ class Conv2DLayer(CoreLayer):
             s = f"Conv2DLayer(initialized={True}, inp={self.inp}, out={self.out}, w.shape={self.w.shape}, filters={self.filters}, kernel_size={self.kernel_size}, stride={self.stride}, padding={self.padding}, act={self.act}, reg={self.reg}, param={self.param})"
         return s
 
+    def validate(self):
+        if self.filters <= 0 or not isinstance(self.filters, int):
+            raise ValueError("")
+        for dim in self.kernel_size:
+            if dim <= 0 or not isinstance(dim, int):
+                raise ValueError("")
+        for dim in self.stride:
+            if dim <= 0 or not isinstance(dim, int):
+                raise ValueError("")
+        if self.padding not in ["none", "valid", "same", "full"]:
+            raise ValueError("")
+
     def set_dims(self, inp):
         self.inp = inp
         self.kernel_size = self.kernel_size + [inp[2], self.filters]
