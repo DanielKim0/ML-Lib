@@ -17,6 +17,8 @@ class MLPModel(TFModel):
             s += "Currently fit\n"
             s += f"w1.shape: {self.w1.shape}\n"
             s += f"w2.shape: {self.w2.shape}\n"
+            s += f"hiddens: {self.hiddens}\n"
+            s += f"outputs: {self.outputs}\n"
             s += f"epochs: {self.num_epochs}/{self.curr_epoch}\n"
             s += f"loss: {self.loss}\n"
             s += f"opt: {self.opt}\n"
@@ -28,7 +30,7 @@ class MLPModel(TFModel):
 
     def __repr__(self):
         if self.model_fit:
-            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
+            s = f"MLPModel(model_fit={True}, w1.shape={self.w1.shape}, w2.shape={self.w2.shape}, hiddens={self.hiddens}, outputs={self.outputs}, loss={self.loss}, opt={self.opt}, act={self.act}, batch_size={self.batch_size}, num_epochs={self.num_epochs}, curr_epoch={self.curr_epoch})"
         else:
             s = f"MLPModel(model_fit={False})"
         return s
@@ -38,6 +40,7 @@ class MLPModel(TFModel):
         data = {
             "loss": self.loss,
             "hiddens": self.hiddens,
+            "outputs": self.outputs,
             "batch_size": self.batch_size,
             "num_epochs": self.num_epochs,
             "curr_epoch": self.curr_epoch,
@@ -61,6 +64,7 @@ class MLPModel(TFModel):
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
         self.hiddens = data["hiddens"]
+        self.hiddens = data["outputs"]
         self.model = self.create_net()
 
         self.w1 = arrays["w1"]
@@ -68,16 +72,11 @@ class MLPModel(TFModel):
         self.w2 = arrays["w2"]
         self.b2 = arrays["b2"]
 
-    def validate_fit(self, X, y, batch_size, num_epochs):
-        if X.shape[0] != y.shape[0]:
+    def validate_model(stddev, hiddens, output):
+        super().validate_model(stddev)
+        if hiddens <= 0 or not isinstance(hiddens, int):
             raise ValueError("")
-        if batch_size <= 0 or not isinstance(batch_size, int):
-            raise ValueError("")
-        if num_epochs <= 0 or not isinstance(num_epochs, int):
-            raise ValueError("")
-
-    def validate_predict(self, X):
-        if X.shape[1] != self.w.shape[0]:
+        if output <= 0 or not isinstance(output, int):
             raise ValueError("")
 
     def create_net(self):
@@ -102,13 +101,14 @@ class MLPModel(TFModel):
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.hiddens = hiddens
+        self.outputs = outputs
         self.opt = opt
         self.loss = loss
         self.act = act
 
         # build, validate, fit
-        self.validate_model(stddev)
-        self.build_model(X.shape[1], self.hiddens, outputs, mean, stddev)
+        self.validate_model(stddev, hiddens, output)
+        self.build_model(X.shape[1], hiddens, outputs, mean, stddev)
         self.validate_fit(X, y, batch_size, num_epochs, opt, loss)
         super().fit(X, y)
 

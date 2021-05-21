@@ -65,17 +65,11 @@ class MLPGenericModel(TFModel):
         self.w = arrays["w"]
         self.b = arrays["b"]
 
-    def validate_fit(self, X, y, batch_size, num_epochs):
-        if X.shape[0] != y.shape[0]:
-            raise ValueError("")
-        if batch_size <= 0 or not isinstance(batch_size, int):
-            raise ValueError("")
-        if num_epochs <= 0 or not isinstance(num_epochs, int):
-            raise ValueError("")
-
-    def validate_predict(self, X):
-        if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
+    def validate_model(stddev, dims):
+        super().validate_model(stddev)
+        for dim in dims:
+            if dims <= 0 or not isinstance(dims, int):
+                raise ValueError("")
 
     def create_net(self):
         def net(X, w, b, act):
@@ -111,7 +105,7 @@ class MLPGenericModel(TFModel):
             self.act = act
 
         # build, validate, fit
-        self.validate_model(stddev)
+        self.validate_model(stddev, dims)
         self.build_model(self.dims, mean, stddev)
         self.validate_fit(X, y, batch_size, num_epochs, opt, loss)
         super().fit(X, y)

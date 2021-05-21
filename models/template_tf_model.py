@@ -18,9 +18,11 @@ class TemplateTFModel(TFModel):
         pass
 
     def validate_fit(self):
+        super.validate_fit()
         pass
 
     def validate_predict(self):
+        super.validate_predict()
         pass
 
     def build_model(self):

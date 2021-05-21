@@ -57,23 +57,11 @@ class SequentialModel(TFModel):
         self.num_epochs = data["num_epochs"]
         self.curr_epoch = data["curr_epoch"]
         self.batch_size = data["batch_size"]    
-        self.model = self.create_net()    
-
+        self.model = self.create_net()
+        
     def validate_model(self):
-        # model structure validation goes here
-        pass
-
-    def validate_fit(self, X, y, batch_size, num_epochs):
-        if X.shape[0] != y.shape[0]:
-            raise ValueError("")
-        if batch_size <= 0 or not isinstance(batch_size, int):
-            raise ValueError("")
-        if num_epochs <= 0 or not isinstance(num_epochs, int):
-            raise ValueError("")
-
-    def validate_predict(self, X):
-        if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
+        for layer in self.layers:
+            layer.validate()
 
     def create_net(self):
         def net(X, model):
@@ -104,7 +92,7 @@ class SequentialModel(TFModel):
         self.loss = loss
 
         # build, validate, fit
-        self.validate_model(stddev)
+        self.validate_model()
         self.build_model(X.shape[1:])
         self.validate_fit(X, y, batch_size, num_epochs, opt, loss)
         super().fit(X, y)

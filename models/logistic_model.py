@@ -65,6 +65,11 @@ class LogisticModel(TFModel):
         self.b = tf.Variable(tf.zeros(w_classes), trainable=True)
         self.model = logreg
 
+    def validate_fit(X, y, classes, batch_size, num_epochs, opt, loss):
+        super().validate_fit(X, y, batch_size, num_epochs, opt, loss)
+        if sorted(tf.unique(y)[0].numpy()) != list(range(0, classes)):
+            raise ValueError("")
+
     def fit(self, X, y, classes, loss, opt, batch_size=16, num_epochs=32, mean=0, stddev=0.01):
         # data casts
         X = tf.cast(tf.constant(X), tf.float32)
