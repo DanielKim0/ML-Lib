@@ -63,11 +63,17 @@ class SequentialModel(TFModel):
         # model structure validation goes here
         pass
 
-    def validate_fit(self):
-        pass
+    def validate_fit(self, X, y, batch_size, num_epochs):
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("")
+        if batch_size <= 0 or not isinstance(batch_size, int):
+            raise ValueError("")
+        if num_epochs <= 0 or not isinstance(num_epochs, int):
+            raise ValueError("")
 
-    def validate_predict(self):
-        pass
+    def validate_predict(self, X):
+        if X.shape[1] != self.w.shape[0]:
+            raise ValueError("")
 
     def create_net(self):
         def net(X, model):
@@ -77,7 +83,6 @@ class SequentialModel(TFModel):
         return net
 
     def build_model(self, inp):
-        # change to 2D+
         prev = []
         curr = inp
         for layer in self.layers:
@@ -100,7 +105,7 @@ class SequentialModel(TFModel):
 
         # build, validate, fit
         self.build_model(X.shape[1:])
-        # self.validate_fit(X, y, act)
+        self.validate_fit(X, y, batch_size, num_epochs)
         super().fit(X, y)
 
     def train_epoch(self, X, y):
@@ -131,4 +136,5 @@ class SequentialModel(TFModel):
         self.opt.update_model(self.layers, grads, self.batch_size)
 
     def predict(self, X):
+        self.validate_predict(X)
         return self.model(X, self.layers)

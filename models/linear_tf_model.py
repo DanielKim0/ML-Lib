@@ -55,10 +55,14 @@ class LinearTFModel(TFModel):
         self.w = arrays["w"]
         self.b = arrays["b"]
 
-    def validate_fit(self, X, y):
+    def validate_fit(self, X, y, batch_size, num_epochs):
         if X.shape[0] != y.shape[0]:
             raise ValueError("")
         if y.shape[1] != 1:
+            raise ValueError("")
+        if batch_size <= 0 or not isinstance(batch_size, int):
+            raise ValueError("")
+        if num_epochs <= 0 or not isinstance(num_epochs, int):
             raise ValueError("")
 
     def validate_predict(self, X):
@@ -83,7 +87,7 @@ class LinearTFModel(TFModel):
         
         # build, validate, fit
         self.build_model(X.shape[1], mean, stddev)
-        self.validate_fit(X, y)
+        self.validate_fit(X, y, batch_size, num_epochs)
         super().fit(X, y)
 
     def train_epoch(self, X, y):

@@ -68,11 +68,17 @@ class MLPModel(TFModel):
         self.w2 = arrays["w2"]
         self.b2 = arrays["b2"]
 
-    def validate_fit(self):
-        pass
+    def validate_fit(self, X, y, batch_size, num_epochs):
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("")
+        if batch_size <= 0 or not isinstance(batch_size, int):
+            raise ValueError("")
+        if num_epochs <= 0 or not isinstance(num_epochs, int):
+            raise ValueError("")
 
-    def validate_predict(self):
-        pass
+    def validate_predict(self, X):
+        if X.shape[1] != self.w.shape[0]:
+            raise ValueError("")
 
     def create_net(self):
         def net(X, w1, b1, w2, b2, act):
@@ -102,7 +108,7 @@ class MLPModel(TFModel):
 
         # build, validate, fit
         self.build_model(X.shape[1], self.hiddens, outputs, mean, stddev)
-        # self.validate_fit(X, y, classes)
+        self.validate_fit(X, y, batch_size, num_epochs)
         super().fit(X, y)
 
     def train_epoch(self, X, y):
@@ -118,4 +124,5 @@ class MLPModel(TFModel):
         self.opt.update([self.w1, self.b1, self.w2, self.b2], [dw1, db1, dw2, db2], self.batch_size)
 
     def predict(self, X):
+        self.validate_predict(X)
         return self.model(X, self.w1, self.b1, self.w2, self.b2, self.act)
