@@ -104,8 +104,9 @@ class SequentialModel(TFModel):
         self.loss = loss
 
         # build, validate, fit
+        self.validate_model(stddev)
         self.build_model(X.shape[1:])
-        self.validate_fit(X, y, batch_size, num_epochs)
+        self.validate_fit(X, y, batch_size, num_epochs, opt, loss)
         super().fit(X, y)
 
     def train_epoch(self, X, y):

@@ -111,8 +111,9 @@ class MLPGenericModel(TFModel):
             self.act = act
 
         # build, validate, fit
+        self.validate_model(stddev)
         self.build_model(self.dims, mean, stddev)
-        self.validate_fit(X, y, batch_size, num_epochs)
+        self.validate_fit(X, y, batch_size, num_epochs, opt, loss)
         super().fit(X, y)
 
     def train_epoch(self, X, y):

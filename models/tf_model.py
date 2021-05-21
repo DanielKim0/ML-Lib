@@ -12,6 +12,26 @@ class TFModel(BaseModel):
         self.global_step = 0
         self.curr_epoch = 0
 
+    def validate_model(self, stddev):
+        if stddev <= 0:
+            raise ValueError("")
+
+    def validate_fit(self, X, y, batch_size, num_epochs, opt, loss):
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("")
+        if y.shape[1] != 1:
+            raise ValueError("")
+        if batch_size <= 0 or not isinstance(batch_size, int):
+            raise ValueError("")
+        if num_epochs <= 0 or not isinstance(num_epochs, int):
+            raise ValueError("")
+        opt.validate()
+        loss.validate()
+
+    def validate_predict(self, X):
+        if X.shape[1] != self.w.shape[0]:
+            raise ValueError("")
+
     @abstractmethod
     def build_model(self, **kwargs):
         pass

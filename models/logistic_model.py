@@ -59,20 +59,6 @@ class LogisticModel(TFModel):
         
         self.w = arrays["w"]
         self.b = arrays["b"]
-        
-    def validate_fit(self, X, y, classes, batch_size, num_epochs):
-        if X.shape[0] != y.shape[0]:
-            raise ValueError("")
-        if sorted(tf.unique(y)[0].numpy()) != list(range(0, classes)):
-            raise ValueError("")
-        if batch_size <= 0 or not isinstance(batch_size, int):
-            raise ValueError("")
-        if num_epochs <= 0 or not isinstance(num_epochs, int):
-            raise ValueError("")
-
-    def validate_predict(self, X):
-        if X.shape[1] != self.w.shape[0]:
-            raise ValueError("")
 
     def build_model(self, w_size, w_classes, w_mean, w_stddev):
         self.w = tf.Variable(tf.random.normal(shape=(w_size, w_classes), mean=w_mean, stddev=w_stddev), trainable=True)
@@ -91,8 +77,9 @@ class LogisticModel(TFModel):
         self.loss = loss
 
         # build, validate, fit
+        self.validate_model(stddev)
         self.build_model(X.shape[1], classes, mean, stddev)
-        self.validate_fit(X, y, classes, batch_size, num_epochs)
+        self.validate_fit(X, y, classes, batch_size, num_epochs, opt, loss)
         super().fit(X, y)
 
     def train_epoch(self, X, y):
